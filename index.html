@@ -1,155 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Max Soccer ⚽ Live Hub</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Max Soccer ⚽ | Live Football Intelligence</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family:'Orbitron',sans-serif; }
-  body { background:linear-gradient(135deg,#0f0c29,#302b63,#24243e); color:#fff; scroll-behavior:smooth; overflow-x:hidden;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+body{
+  background:radial-gradient(circle at top,#1b1f4b,#070a1f);
+  color:#fff;
+  scroll-behavior:smooth;
+}
 
-  /* Hero */
-  .hero { padding:6rem 2rem; text-align:center; }
-  .hero h1 { font-size:3rem; color:#ff0000; text-shadow:0 0 20px #ff0000; margin-bottom:1rem; }
-  .hero .cta { margin-top:1rem; font-size:1.3rem; color:#fff; text-shadow:0 0 5px #ff0000; }
+/* ===== HERO ===== */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:4rem 2rem;
+}
+.hero h1{
+  font-size:3.5rem;
+  color:#ff0000;
+  text-shadow:0 0 25px rgba(255,0,0,.8);
+}
+.hero p{
+  max-width:700px;
+  margin-top:1.5rem;
+  font-size:1.2rem;
+  opacity:.9;
+}
+.hero .vip-btn{
+  margin-top:2.5rem;
+  padding:1.3rem 3.5rem;
+  background:linear-gradient(135deg,#ff0000,#ff4d4d);
+  color:#fff;
+  text-decoration:none;
+  border-radius:50px;
+  font-size:1.2rem;
+  box-shadow:0 0 40px rgba(255,0,0,.6);
+  transition:.4s;
+}
+.hero .vip-btn:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 70px rgba(255,0,0,.9);
+}
 
-  .buttons { margin-top:3rem; }
-  .buttons a {
-    padding:1.2rem 2.5rem; margin:0.8rem;
-    background:#ff0000; color:#fff; text-decoration:none;
-    border-radius:15px; font-weight:bold;
-    transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow:0 5px 20px rgba(255,0,0,0.5);
-  }
-  .buttons a:hover {
-    transform:scale(1.08);
-    box-shadow:0 10px 30px rgba(255,0,0,0.7);
-  }
+/* ===== SECTION ===== */
+section{
+  padding:6rem 3rem;
+  max-width:1400px;
+  margin:auto;
+}
+.section-title{
+  text-align:center;
+  font-size:2.3rem;
+  color:#ff0000;
+  margin-bottom:3rem;
+  letter-spacing:2px;
+}
 
-  /* Section Styles */
-  section { padding:4rem 2rem; }
-  .section-title { font-size:2.2rem; text-align:center; text-transform:uppercase; color:#ff0000; margin-bottom:2rem; letter-spacing:2px; }
+/* ===== GRID ===== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:3rem;
+}
 
-  .cards {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:2rem;
-  }
-  .card {
-    background:rgba(255,255,255,0.07);
-    backdrop-filter:blur(15px);
-    border-radius:20px;
-    padding:1.5rem;
-    transition: transform 0.4s, box-shadow 0.4s;
-    position:relative;
-  }
-  .card:hover { 
-    transform:translateY(-10px) rotateX(3deg);
-    box-shadow:0 15px 40px rgba(255,0,0,0.6);
-  }
-  .card img { width:100%; border-radius:12px; margin-bottom:1rem; transition: transform 0.3s; }
-  .card img:hover { transform:scale(1.05); }
-  .live-score { font-size:1.2rem; font-weight:700; text-shadow:0 0 5px #ff0000; }
+/* ===== CARD ===== */
+.card{
+  background:rgba(255,255,255,.06);
+  border-radius:25px;
+  padding:2rem;
+  text-decoration:none;
+  color:#fff;
+  backdrop-filter:blur(20px);
+  box-shadow:0 15px 40px rgba(0,0,0,.5);
+  transition:.4s;
+  position:relative;
+}
+.card:hover{
+  transform:translateY(-15px);
+  box-shadow:0 25px 60px rgba(255,0,0,.4);
+}
+.card img{
+  width:100%;
+  border-radius:15px;
+  margin-bottom:1.5rem;
+}
+.card h3{
+  font-size:1.4rem;
+  margin-bottom:.8rem;
+}
+.card p{
+  opacity:.85;
+  line-height:1.6;
+}
 
-  /* Glow placeholder effect */
-  ::placeholder {
-    color: rgba(255,0,0,0.6);
-    text-shadow:0 0 5px #ff0000;
-  }
+/* ===== VIP TAG ===== */
+.vip-tag{
+  position:absolute;
+  top:20px;
+  right:20px;
+  background:#ff0000;
+  padding:.4rem .8rem;
+  border-radius:20px;
+  font-size:.75rem;
+  box-shadow:0 0 15px rgba(255,0,0,.7);
+}
 
-  /* Alert */
-  .alert {
-    position:fixed; top:1rem; right:1rem;
-    background:#ff0000; padding:1rem 1.5rem;
-    border-radius:15px; display:none; z-index:1000;
-    box-shadow:0 5px 20px rgba(255,0,0,0.7);
-  }
+/* ===== FOOTER ===== */
+footer{
+  padding:4rem 2rem;
+  text-align:center;
+  background:#050712;
+}
+footer p{
+  opacity:.6;
+  font-size:.9rem;
+}
 </style>
 </head>
 <body>
 
-<!-- Hero -->
-<div class="hero" id="home">
-  <h1>Welcome to Max Soccer ⚽</h1>
-  <p class="cta">Your go‑to hub for live scores, football news, results, and predictions.</p>
-  <div class="buttons">
-    <a href="#live-scores">Live Scores</a>
-    <a href="news.html">News</a>
-    <a href="prediction.html">Predictions</a>
-    <a href="results.html">Results</a>
-    <a href="login-register.html">Subscribe VIP</a>
-  </div>
+<!-- HERO -->
+<div class="hero">
+  <h1>Max Soccer ⚽</h1>
+  <p>
+    Real-time football intelligence, live scores, predictions,
+    and exclusive Liverpool-focused insights trusted by thousands of fans worldwide.
+  </p>
+  <a href="login-register.html" class="vip-btn">Unlock VIP Predictions</a>
 </div>
 
-<!-- Live Scores -->
-<section id="live-scores">
-  <h2 class="section-title">Live Football Scores</h2>
-  <div class="cards" id="scoresCards"></div>
+<!-- LIVE HUB -->
+<section>
+  <h2 class="section-title">Live Football Hub</h2>
+
+  <div class="grid">
+
+    <a href="news.html" class="card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Soccer_ball.svg" alt="Football News">
+      <h3>Breaking Football News</h3>
+      <p>Live Liverpool updates, transfer news, injuries and verified breaking headlines.</p>
+    </a>
+
+    <a href="results.html" class="card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Football_match.svg" alt="Live Results">
+      <h3>Live Results & Scores</h3>
+      <p>Real-time match results with live updates as goals happen.</p>
+    </a>
+
+    <a href="prediction.html" class="card">
+      <span class="vip-tag">VIP</span>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Soccer_strategy.svg" alt="Predictions">
+      <h3>Expert Predictions</h3>
+      <p>AI-assisted predictions, form analysis, and odds insights.</p>
+    </a>
+
+  </div>
 </section>
 
-<!-- Latest Updates -->
-<section id="latest-updates">
-  <h2 class="section-title">Latest Football Updates</h2>
-  <div class="cards" id="newsCards"></div>
+<!-- VIP SECTION -->
+<section>
+  <h2 class="section-title">Why Go VIP?</h2>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>🔥 Hot Predictions</h3>
+      <p>Access high-confidence predictions before public release.</p>
+    </div>
+
+    <div class="card">
+      <h3>📊 Advanced Match Data</h3>
+      <p>In-depth analytics, probability models, and exclusive stats.</p>
+    </div>
+
+    <div class="card">
+      <h3>⚡ Instant Alerts</h3>
+      <p>Get notified immediately when breaking Liverpool news drops.</p>
+    </div>
+
+  </div>
+
+  <div style="text-align:center;margin-top:4rem;">
+    <a href="login-register.html" class="vip-btn">Join Max Soccer VIP</a>
+  </div>
 </section>
 
-<div class="alert" id="liveAlert"></div>
-
-<script>
-  // ==== LIVE SCORES (Public API) ====
-  const scoresCards = document.getElementById('scoresCards');
-  const liveAlert = document.getElementById('liveAlert');
-
-  async function fetchLiveScores(){
-    try {
-      const res = await fetch(`https://sportdb.dev/api/football/live`);
-      const data = await res.json();
-      scoresCards.innerHTML = '';
-      data.forEach(match=>{
-        scoresCards.innerHTML += `
-          <div class="card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Soccer_ball.svg" alt="Soccer Ball">
-            <div class="live-score">${match.name} — ${match.score?.home || 0}:${match.score?.away || 0}</div>
-            <small>Status: ${match.status || 'Live'}</small>
-          </div>
-        `;
-      });
-    } catch (err) {
-      scoresCards.innerHTML = '<p style="text-align:center">Unable to load live scores.</p>';
-      console.error(err);
-    }
-  }
-  fetchLiveScores();
-  setInterval(fetchLiveScores, 30000);
-
-  // ==== NEWS SNIPPETS (Public NewsAPI Example) ====
-  const newsCards = document.getElementById('newsCards');
-
-  async function fetchNews(){
-    try {
-      const API_KEY = "YOUR_NEWSAPI_KEY"; // Replace with your key
-      const res = await fetch(`https://newsapi.org/v2/everything?q=football%20soccer&sortBy=publishedAt&pageSize=6&apiKey=${API_KEY}`);
-      const data = await res.json();
-      newsCards.innerHTML = '';
-      data.articles.forEach(article => {
-        newsCards.innerHTML += `
-          <div class="card">
-            <img src="${article.urlToImage || 'https://upload.wikimedia.org/wikipedia/commons/0/0c/Soccer_ball.svg'}" alt="News">
-            <h3>${article.title}</h3>
-            <p>${article.description?.slice(0,100) || ''}…</p>
-          </div>
-        `;
-      });
-    } catch(err) {
-      newsCards.innerHTML = '<p style="text-align:center">Unable to load news.</p>';
-      console.error(err);
-    }
-  }
-  fetchNews();
-  setInterval(fetchNews, 60000);
-</script>
+<footer>
+  <p>© 2026 Max Soccer ⚽ — Built for real football fans</p>
+</footer>
 
 </body>
 </html>
