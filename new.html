@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Max Soccer ⚽ | Liverpool News</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Orbitron', sans-serif; }
+  body { background: linear-gradient(135deg,#0f0c29,#302b63,#24243e); color:#fff; min-height:100vh; }
+
+  header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); position: sticky; top:0; z-index:1000; }
+  .logo h2 { color:#ff0000; text-shadow:0 0 10px #ff0000; }
+  nav a { margin-left:1.5rem; color:#fff; font-weight:600; transition:color 0.3s; }
+  nav a:hover { color:#ff0000; }
+
+  section { padding:4rem 2rem; }
+  .section-title { text-align:center; font-size:2rem; margin-bottom:2rem; color:#ff0000; text-transform:uppercase; letter-spacing:2px; }
+
+  .cards { display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
+  .card { background: rgba(255,255,255,0.05); border-radius:15px; padding:1.5rem; backdrop-filter:blur(5px); transition: transform 0.3s, box-shadow 0.3s; }
+  .card:hover { transform: translateY(-8px); box-shadow:0 10px 25px rgba(255,0,0,0.5); }
+  .card h3 { margin-bottom:0.5rem; font-size:1.2rem; }
+  .card p { font-size:0.95rem; color:#ccc; margin-bottom:0.5rem; }
+  .card a { font-weight:bold; color:#0ff; transition: color 0.3s; }
+  .card a:hover { color:#ff0; }
+
+  footer { text-align:center; padding:2rem; font-size:0.9rem; color:#aaa; border-top:1px solid rgba(255,255,255,0.1); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><h2>Max Soccer ⚽</h2></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="news.html">News</a>
+    <a href="predictions.html">Predictions</a>
+    <a href="vip.html">VIP</a>
+    <a href="login-register.html">Login/Register</a>
+  </nav>
+</header>
+
+<section>
+  <h2 class="section-title">Latest Liverpool News</h2>
+  <div class="cards" id="news-cards">
+    <p style="text-align:center; grid-column: 1/-1;">Loading news…</p>
+  </div>
+</section>
+
+<footer>
+  &copy; 2026 Max Soccer ⚽ | Responsible Gaming
+</footer>
+
+<script>
+  const newsContainer = document.getElementById('news-cards');
+  const NEWS_API_KEY = 'YOUR_NEWSAPI_KEY'; // replace with your NewsAPI.org API key
+
+  async function fetchNews(){
+    try {
+      const res = await axios.get(`https://newsapi.org/v2/everything?q=Liverpool FC&sortBy=publishedAt&language=en&pageSize=12&apiKey=${NEWS_API_KEY}`);
+      newsContainer.innerHTML = '';
+      res.data.articles.forEach(article => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h3>${article.title}</h3>
+          <p>${article.description ? article.description.slice(0,100) + '...' : ''}</p>
+          <a href="${article.url}" target="_blank">Read More</a>
+        `;
+        newsContainer.appendChild(card);
+      });
+    } catch(err){
+      console.error(err);
+      newsContainer.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">Unable to fetch news at this time.</p>';
+    }
+  }
+
+  fetchNews();
+</script>
+
+</body>
+</html>
