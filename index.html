@@ -3,169 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Max Soccer ⚽ | Live Liverpool News, Scores & Predictions</title>
+<title>Max Soccer ⚽ | Live Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
-  body { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: #fff; overflow-x: hidden; }
-  a { color: inherit; text-decoration: none; }
-  header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); position: sticky; top:0; z-index: 1000; }
-  .logo { display: flex; align-items: center; gap: 0.5rem; }
-  .logo svg { width: 60px; height: 60px; animation: spin 4s linear infinite; }
-  @keyframes spin { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
-  nav a { margin-left: 1.5rem; font-weight: 600; transition: color 0.3s; }
-  nav a:hover { color: #ff0000; }
-  .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 6rem 2rem; }
-  .hero h1 { font-size: 3rem; color: #ff0000; text-shadow: 0 0 10px #ff0000; margin-bottom: 1rem;}
-  .hero p { font-size: 1.2rem; color: #ccc; max-width: 700px; margin-bottom: 1.5rem; }
-  .hero button { padding: 1rem 2rem; font-size: 1rem; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; background: #ff0000; color: #fff; transition: transform 0.3s; }
-  .hero button:hover { transform: scale(1.05); }
-  .live-users { color: #0ff; font-size: 1.2rem; animation: pulse 2s infinite;}
-  @keyframes pulse { 0% {opacity: 0.5;} 50% {opacity: 1;} 100% {opacity: 0.5;} }
-  section { padding: 3rem 2rem; }
-  .section-title { text-align:center; font-size:2rem; text-transform:uppercase; letter-spacing:2px; color:#ff0000; margin-bottom:1.5rem; }
-  .cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:1.5rem; }
-  .card { background: rgba(255,255,255,0.07); border-radius:12px; padding:1.5rem; backdrop-filter: blur(7px); transition: transform 0.3s, box-shadow 0.3s; }
-  .card:hover { transform: translateY(-8px); box-shadow: 0px 10px 25px rgba(255,0,0,0.5); }
-  footer { text-align:center; padding:2rem; font-size:0.9rem; color:#aaa; border-top:1px solid rgba(255,255,255,0.1); }
-  .vip-button { display:block; margin:2rem auto; padding:1rem 2rem; background:#ff0000; color:#fff; border-radius:10px; font-weight:bold; cursor:pointer; transition: transform 0.3s;}
-  .vip-button:hover { transform: scale(1.05); }
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Orbitron',sans-serif; }
+  body { background: linear-gradient(135deg,#0f0c29,#302b63,#24243e); color:#fff; min-height:100vh; overflow-x:hidden;}
+  
+  header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; backdrop-filter:blur(5px); background:rgba(0,0,0,0.6); position:sticky; top:0; z-index:1000;}
+  header h2 { color:#ff0000; text-shadow:0 0 10px #ff0000; }
+  nav a { margin-left:1rem; font-weight:600; transition:0.3s; }
+  nav a:hover { color:#ff0000; }
+  
+  .hero { text-align:center; padding:3rem 2rem; }
+  .hero h1 { font-size:2.5rem; color:#ff0000; margin-bottom:1rem; text-transform:uppercase; }
+  .buttons { margin-top:1.5rem; }
+  .buttons a { text-decoration:none; padding:0.8rem 1.5rem; margin:0.5rem; display:inline-block; background:#ff0000; color:#fff; border-radius:10px; font-weight:bold; transition: transform 0.3s; }
+  .buttons a:hover { transform:scale(1.05); }
+
+  section { padding:2rem; }
+  .section-title { font-size:2rem; color:#ff0000; text-align:center; margin-bottom:2rem; text-transform:uppercase; letter-spacing:2px; }
+  
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
+  .card { background:rgba(255,255,255,0.05); border-radius:12px; padding:1.5rem; backdrop-filter:blur(7px); transition: transform 0.3s, box-shadow 0.3s; position:relative; overflow:hidden; }
+  .card:hover { transform:translateY(-8px); box-shadow:0 10px 30px rgba(255,0,0,0.5); }
+  .card h3 { font-size:1.2rem; margin-bottom:0.5rem; }
+  .card p { font-size:1rem; margin-bottom:0.3rem; }
+  .card img { width:100%; border-radius:8px; margin-bottom:0.5rem; }
+  .vip-badge { position:absolute; top:0.5rem; right:0.5rem; background:#ff0000; padding:0.3rem 0.6rem; font-size:0.8rem; border-radius:6px; cursor:pointer; }
+  .live-icon { width:20px; vertical-align:middle; margin-left:0.3rem; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%{transform:scale(1);}50%{transform:scale(1.2);}100%{transform:scale(1);} }
+
+  .alert { position:fixed; top:1rem; right:1rem; background:#ff0000; padding:1rem 1.5rem; border-radius:10px; display:none; animation:fadeInDown 0.5s; z-index:2000; }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px);} to { opacity:1; transform:translateY(0);} }
+
+  #subscribeModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:2000; }
+  #subscribeModal .modal { background:#111; padding:1.5rem; border-radius:12px; text-align:center; }
+  #subscribeModal button { background:#ff0000; padding:0.8rem 1.2rem; border:none; border-radius:8px; font-weight:700; cursor:pointer; margin-top:1rem; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <svg viewBox="0 0 64 64">
-      <circle cx="32" cy="32" r="30" fill="#ff0000" stroke="#fff" stroke-width="3"/>
-      <polygon points="32,2 39,20 58,24 44,38 48,58 32,48 16,58 20,38 6,24 25,20" fill="#fff"/>
-    </svg>
-    <h2>Max Soccer</h2>
-  </div>
+  <h2>Max Soccer ⚽ Live Hub</h2>
   <nav>
-    <a href="#news">News</a>
-    <a href="#live-scores">Live Scores</a>
-    <a href="#predictions">Predictions</a>
-    <a href="#results">Results</a>
-    <a href="login-register.html">Login / VIP</a>
+    <a href="results.html">Results</a>
+    <a href="predictions.html">Predictions</a>
+    <a href="news.html">News</a>
+    <a href="vip.html">VIP</a>
+    <a href="login-register.html">Login/Register</a>
   </nav>
 </header>
 
-<section class="hero">
-  <h1>Max Soccer ⚽ — Live Action Hub</h1>
-  <p>Your destination for real‑time Liverpool news, live matches, predictions, and VIP insights. Stay in the game!</p>
-  <div class="live-users" id="live-users">Active Users: 0</div>
-  <button class="vip-button" onclick="window.location.href='login-register.html'">Login to Unlock VIP</button>
-</section>
-
-<section id="news">
-  <h2 class="section-title">Latest Liverpool News</h2>
-  <div class="cards" id="news-cards"></div>
-</section>
-
-<section id="live-scores">
-  <h2 class="section-title">Live Match Scores</h2>
-  <div class="cards" id="live-scores-cards"></div>
-</section>
-
-<section id="predictions">
-  <h2 class="section-title">Dynamic Predictions</h2>
-  <div class="cards" id="predictions-cards"></div>
-</section>
-
-<section id="results">
-  <h2 class="section-title">Prediction Results</h2>
-  <div class="cards">
-    <div class="card"><h3>Liverpool 2‑1 Arsenal</h3><p>Prediction hit!</p></div>
-    <div class="card"><h3>Liverpool 3‑0 Man United</h3><p>Perfect outcome!</p></div>
+<div class="hero">
+  <h1>Welcome to Max Soccer ⚽</h1>
+  <div class="buttons">
+    <a href="results.html">Live Results</a>
+    <a href="predictions.html">Predictions</a>
+    <a href="news.html">News</a>
   </div>
+</div>
+
+<section>
+  <h2 class="section-title">Live Liverpool Highlights & Predictions</h2>
+  <div class="cards" id="liveCards"></div>
 </section>
 
-<footer>
-  &copy; 2026 Max Soccer ⚽ | Responsible Gaming
-</footer>
+<!-- Alerts -->
+<div class="alert" id="liveAlert"></div>
+
+<!-- Subscribe Modal -->
+<div id="subscribeModal">
+  <div class="modal">
+    <h3>Unlock VIP Content!</h3>
+    <p>This content is VIP-only. Subscribe now to access all live highlights and predictions.</p>
+    <button onclick="window.location.href='login-register.html'">Subscribe Now</button>
+  </div>
+</div>
 
 <script>
-  // 🎯 Supabase & Real-Time Active Users
   const SUPABASE_URL = "YOUR_SUPABASE_URL";
   const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
   const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  const liveUsersEl = document.getElementById("live‑users");
 
-  async function updateActiveUsers() {
-    const { data, error } = await supabase
-      .from("active_users")
-      .select("count", { count: "exact" });
-    let count = data?.length ? data[0].count : 0;
-    count = Math.max(count, 10000); // encourage >= 10,000+
-    liveUsersEl.textContent = `Active Users: ${count.toLocaleString()}`;
+  const liveCards = document.getElementById('liveCards');
+  const liveAlert = document.getElementById('liveAlert');
+  const subscribeModal = document.getElementById('subscribeModal');
+
+  let lastLiveItems = [];
+
+  // Get logged-in user
+  async function getCurrentUser(){
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.user ?? null;
   }
-  updateActiveUsers();
-  setInterval(updateActiveUsers, 5000);
 
-  // 📰 NewsAPI Liverpool news
-  const newsContainer = document.getElementById("news‑cards");
-  const NEWS_API_KEY = "YOUR_NEWSAPI_KEY";
-  async function fetchNews() {
-    try {
-      const res = await axios.get(
-        `https://newsapi.org/v2/everything?q=Liverpool FC&sortBy=publishedAt&language=en&pageSize=6&apiKey=${NEWS_API_KEY}`
-      );
-      res.data.articles.forEach((article) => {
-        newsContainer.innerHTML += `
-          <div class="card">
-            <h3>${article.title}</h3>
-            <p>${article.description?.slice(0,80) || ""}…</p>
-            <a href="${article.url}" target="_blank">Read More</a>
-          </div>`;
-      });
-    } catch (err) {
-      newsContainer.innerHTML = "<p>Unable to fetch news.</p>";
-      console.error(err);
+  // Fetch live predictions & results from Supabase
+  async function fetchLiveItems(){
+    const user = await getCurrentUser();
+    
+    // Public predictions/results
+    const { data: publicPred, error: errPred } = await supabase.from('predictions').select('*').order('match_date',{ascending:true});
+    const { data: publicResults, error: errRes } = await supabase.from('match_results').select('*').order('match_date',{ascending:false});
+    const { data: vipPred, error: errVIP } = user ? await supabase.from('vip_predictions').select('*').order('match_date',{ascending:true}) : [];
+
+    if(errPred || errRes || errVIP) console.error(errPred, errRes, errVIP);
+
+    const combined = [
+      ...vipPred.map(x=>({...x,vip:true})),
+      ...publicPred.map(x=>({...x,vip:false})),
+      ...publicResults.map(x=>({...x,vip:false, result:true}))
+    ];
+
+    return { combined, user };
+  }
+
+  // Render live cards
+  async function renderLive(){
+    const { combined, user } = await fetchLiveItems();
+    liveCards.innerHTML = '';
+
+    combined.forEach(item=>{
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      if(item.vip){
+        const badge = document.createElement('div');
+        badge.className = 'vip-badge';
+        badge.textContent = 'VIP';
+        badge.onclick = () => {
+          if(!user) subscribeModal.style.display='flex';
+        };
+        card.appendChild(badge);
+      }
+
+      // Card content
+      if(item.result){
+        card.innerHTML += `<h3>${item.home_team} ${item.home_score} - ${item.away_score} ${item.away_team} <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" class="live-icon" title="Live Score"/></h3>`;
+        card.innerHTML += `<p>Status: ${item.status}</p>`;
+      } else {
+        card.innerHTML += `<h3>${item.match} ${item.vip?'(VIP)':''} <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" class="live-icon" title="Live Prediction"/></h3>`;
+        card.innerHTML += `<p>Prediction: ${item.prediction}</p>`;
+      }
+
+      if(item.image) card.innerHTML += `<img src="${item.image}" alt="highlight">`;
+
+      liveCards.appendChild(card);
+    });
+
+    // Push alert on new top item
+    if(combined[0] && combined[0].match !== lastLiveItems[0]){
+      liveAlert.textContent = combined[0].match || `${combined[0].home_team} vs ${combined[0].away_team}`;
+      liveAlert.style.display='block';
+      setTimeout(()=>liveAlert.style.display='none',4000);
+      lastLiveItems = combined.map(i => i.match || (i.home_team+i.away_team));
     }
   }
-  fetchNews();
 
-  // ⚽ Live Match Scores (Public API)
-  const liveScoresContainer = document.getElementById("live‑scores‑cards");
-  async function fetchLiveScores() {
-    try {
-      const res = await axios.get("https://sportdb.dev/api/football/live"); // SportDB.dev example 2
-      res.data.forEach((match) => {
-        liveScoresContainer.innerHTML += `
-          <div class="card">
-            <h3>${match.name}</h3>
-            <p>${match.score?.home} - ${match.score?.away}</p>
-            <small>${match.status}</small>
-          </div>`;
-      });
-    } catch (err) {
-      liveScoresContainer.innerHTML = "<p>No live matches right now.</p>";
-      console.error(err);
-    }
-  }
-  fetchLiveScores();
-  setInterval(fetchLiveScores, 30000);
-
-  // 🧠 Dynamic Predictions (Supabase Table)
-  const predictionsContainer = document.getElementById("predictions‑cards");
-  async function fetchPredictions() {
-    const { data, error } = await supabase.from("predictions").select("*").order("match_date");
-    if (!error) {
-      data.forEach((pred) => {
-        predictionsContainer.innerHTML += `
-          <div class="card">
-            <h3>${pred.match}</h3>
-            <p>${pred.prediction}</p>
-            <small>${new Date(pred.match_date).toLocaleDateString()}</small>
-          </div>`;
-      });
-    }
-  }
-  fetchPredictions();
-
+  // Auto-refresh every 30 seconds
+  renderLive();
+  setInterval(renderLive, 30000);
 </script>
 
 </body>
