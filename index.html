@@ -30,6 +30,24 @@ body{
   font-size:1.15rem;
   opacity:.9;
 }
+
+/* LIVE USERS */
+.live-users{
+  margin-top:2rem;
+  display:inline-block;
+  padding:0.9rem 2rem;
+  border-radius:40px;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 25px rgba(255,0,0,.4);
+  font-size:1rem;
+}
+.live-users span{
+  color:#ff4d4d;
+  font-weight:700;
+  text-shadow:0 0 10px rgba(255,0,0,.8);
+}
+
 .hero a{
   display:inline-block;
   margin-top:3rem;
@@ -135,6 +153,12 @@ footer{
     Live football scores, Liverpool-focused news, match results and expert predictions —
     trusted by real fans worldwide.
   </p>
+
+  <!-- LIVE USERS -->
+  <div class="live-users">
+    🔴 <span id="userCount">10,928</span> fans online now
+  </div>
+
   <a href="login-register.html">Unlock VIP Predictions</a>
 </div>
 
@@ -151,21 +175,29 @@ footer{
 <script>
 const grid = document.getElementById("mainGrid");
 
-// Uses SAME API source as results/news (NO broken images)
+/* LIVE USERS COUNTER (STIMULATED) */
+let users = 10928;
+const userEl = document.getElementById("userCount");
+
+setInterval(() => {
+  const change = Math.floor(Math.random() * 4); // subtle growth
+  users += Math.random() > 0.5 ? change : -1;
+  userEl.textContent = users.toLocaleString();
+}, 3000);
+
+/* LIVE HOMEPAGE CONTENT */
 async function loadHomepage(){
   const res = await fetch("https://www.scorebat.com/video-api/v3/");
   const data = await res.json();
 
-  // Find Liverpool-related match for thumbnails
   const liverpoolMatch = data.response.find(
     m => m.title.toLowerCase().includes("liverpool")
   ) || data.response[0];
 
   const img = liverpoolMatch.thumbnail;
-  const comp = liverpoolMatch.competition;
 
   grid.innerHTML = `
-    <a href="news.html" class="card">
+    <a href="new.html" class="card">
       <img src="${img}" alt="Football News">
       <h3>Football News</h3>
       <p>Breaking Liverpool news, transfers, injuries and verified match updates.</p>
