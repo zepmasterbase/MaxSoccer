@@ -15,29 +15,6 @@ body{
   scroll-behavior:smooth;
 }
 
-/* ===== LIVE TICKER ===== */
-.ticker-wrap{
-  width:100%;
-  overflow:hidden;
-  background:#0b0f2a;
-  border-bottom:1px solid rgba(255,0,0,.3);
-}
-.ticker{
-  display:inline-block;
-  padding-left:100%;
-  animation:ticker 25s linear infinite;
-}
-.ticker span{
-  margin-right:4rem;
-  color:#ff4d4d;
-  font-size:.95rem;
-  text-shadow:0 0 8px rgba(255,0,0,.7);
-}
-@keyframes ticker{
-  0%{transform:translateX(0)}
-  100%{transform:translateX(-100%)}
-}
-
 /* ===== HERO ===== */
 .hero{
   min-height:100vh;
@@ -114,14 +91,19 @@ section{
 }
 .card img{
   width:100%;
-  border-radius:18px;
+  border-radius:15px;
   margin-bottom:1.5rem;
-  transform:perspective(800px) rotateX(6deg);
+}
+
+/* 3D enhancement for news image only */
+.news-3d{
+  transform:perspective(900px) rotateX(8deg);
   transition:.4s;
 }
-.card:hover img{
-  transform:perspective(800px) rotateX(0deg) scale(1.05);
+.card:hover .news-3d{
+  transform:perspective(900px) rotateX(0deg) scale(1.05);
 }
+
 .card h3{
   font-size:1.4rem;
   margin-bottom:.8rem;
@@ -137,7 +119,7 @@ section{
   top:20px;
   right:20px;
   background:#ff0000;
-  padding:.4rem .9rem;
+  padding:.4rem .8rem;
   border-radius:20px;
   font-size:.75rem;
   box-shadow:0 0 15px rgba(255,0,0,.7);
@@ -157,16 +139,6 @@ footer p{
 </head>
 <body>
 
-<!-- LIVE SCORE TICKER -->
-<div class="ticker-wrap">
-  <div class="ticker">
-    <span>⚽ Liverpool 2 – 1 Arsenal (Live)</span>
-    <span>⚽ Man City 1 – 0 Chelsea</span>
-    <span>⚽ Barcelona 3 – 2 Atletico</span>
-    <span>⚽ PSG 0 – 0 Marseille</span>
-  </div>
-</div>
-
 <!-- HERO -->
 <div class="hero">
   <h1>Max Soccer ⚽</h1>
@@ -183,26 +155,28 @@ footer p{
 
   <div class="grid">
 
-    <!-- NEWS -->
-    <a href="news.html" class="card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Football_3D_icon.svg" alt="Football News">
+    <!-- FOOTBALL NEWS (ENHANCED + LINKED TO new.html) -->
+    <a href="new.html" class="card">
+      <img class="news-3d"
+        src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Football_3D_icon.svg"
+        alt="Football News 3D">
       <h3>Breaking Football News</h3>
-      <p>Live Liverpool updates, transfers, injuries and verified breaking headlines.</p>
+      <p>Live Liverpool updates, transfer news, injuries and verified breaking headlines.</p>
     </a>
 
     <!-- RESULTS -->
     <a href="results.html" class="card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Football_match_3D.svg" alt="Live Results">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Football_match.svg" alt="Live Results">
       <h3>Live Results & Scores</h3>
-      <p>Real-time match results with instant goal updates.</p>
+      <p>Real-time match results with live updates as goals happen.</p>
     </a>
 
     <!-- PREDICTIONS -->
     <a href="prediction.html" class="card">
       <span class="vip-tag">VIP</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Football_strategy_3D.svg" alt="Predictions">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Soccer_strategy.svg" alt="Predictions">
       <h3>Expert Predictions</h3>
-      <p>AI-assisted predictions, form analysis and smart betting insights.</p>
+      <p>AI-assisted predictions, form analysis, and odds insights.</p>
     </a>
 
   </div>
@@ -216,17 +190,17 @@ footer p{
 
     <div class="card">
       <h3>🔥 Hot Predictions</h3>
-      <p>High-confidence predictions before public release.</p>
+      <p>Access high-confidence predictions before public release.</p>
     </div>
 
     <div class="card">
       <h3>📊 Advanced Match Data</h3>
-      <p>Deep analytics, probabilities and insider-level insights.</p>
+      <p>In-depth analytics, probability models, and exclusive stats.</p>
     </div>
 
     <div class="card">
       <h3>⚡ Instant Alerts</h3>
-      <p>Breaking Liverpool news delivered immediately.</p>
+      <p>Get notified immediately when breaking Liverpool news drops.</p>
     </div>
 
   </div>
