@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Max Soccer ⚽ | Live Football Intelligence</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Max Soccer ⚽ | Live Football Hub</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 
@@ -12,128 +12,117 @@
 body{
   background:radial-gradient(circle at top,#1b1f4b,#070a1f);
   color:#fff;
-  scroll-behavior:smooth;
 }
 
-/* ===== HERO ===== */
+/* HERO */
 .hero{
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
+  padding:6rem 2rem;
   text-align:center;
-  padding:4rem 2rem;
 }
 .hero h1{
-  font-size:3.5rem;
+  font-size:3.4rem;
   color:#ff0000;
-  text-shadow:0 0 25px rgba(255,0,0,.8);
+  text-shadow:0 0 25px rgba(255,0,0,.85);
 }
 .hero p{
-  max-width:700px;
-  margin-top:1.5rem;
-  font-size:1.2rem;
+  max-width:750px;
+  margin:1.5rem auto 0;
+  font-size:1.15rem;
   opacity:.9;
 }
-.hero .vip-btn{
-  margin-top:2.5rem;
+.hero a{
+  display:inline-block;
+  margin-top:3rem;
   padding:1.3rem 3.5rem;
   background:linear-gradient(135deg,#ff0000,#ff4d4d);
   color:#fff;
   text-decoration:none;
   border-radius:50px;
   font-size:1.2rem;
-  box-shadow:0 0 40px rgba(255,0,0,.6);
+  box-shadow:0 0 45px rgba(255,0,0,.7);
   transition:.4s;
 }
-.hero .vip-btn:hover{
-  transform:scale(1.1);
-  box-shadow:0 0 70px rgba(255,0,0,.9);
+.hero a:hover{
+  transform:scale(1.08);
+  box-shadow:0 0 75px rgba(255,0,0,.9);
 }
 
-/* ===== SECTION ===== */
+/* SECTION */
 section{
-  padding:6rem 3rem;
+  padding:5rem 3rem;
   max-width:1400px;
   margin:auto;
 }
 .section-title{
   text-align:center;
-  font-size:2.3rem;
+  font-size:2.2rem;
+  margin-bottom:3.5rem;
   color:#ff0000;
-  margin-bottom:3rem;
-  letter-spacing:2px;
 }
 
-/* ===== GRID ===== */
+/* GRID */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
   gap:3rem;
 }
 
-/* ===== CARD ===== */
+/* CARD */
 .card{
-  background:rgba(255,255,255,.06);
+  background:rgba(255,255,255,.07);
   border-radius:25px;
-  padding:2rem;
+  padding:1.7rem;
   text-decoration:none;
   color:#fff;
-  backdrop-filter:blur(20px);
+  backdrop-filter:blur(18px);
   box-shadow:0 15px 40px rgba(0,0,0,.5);
   transition:.4s;
-  position:relative;
 }
 .card:hover{
-  transform:translateY(-15px);
-  box-shadow:0 25px 60px rgba(255,0,0,.4);
+  transform:translateY(-14px);
+  box-shadow:0 28px 65px rgba(255,0,0,.45);
 }
 .card img{
   width:100%;
-  border-radius:15px;
-  margin-bottom:1.5rem;
-}
-
-/* 3D enhancement for news image only */
-.news-3d{
-  transform:perspective(900px) rotateX(8deg);
+  border-radius:18px;
+  margin-bottom:1.3rem;
+  transform:perspective(900px) rotateX(7deg);
   transition:.4s;
 }
-.card:hover .news-3d{
+.card:hover img{
   transform:perspective(900px) rotateX(0deg) scale(1.05);
 }
-
 .card h3{
-  font-size:1.4rem;
-  margin-bottom:.8rem;
+  font-size:1.35rem;
+  margin-bottom:.6rem;
 }
 .card p{
   opacity:.85;
   line-height:1.6;
 }
 
-/* ===== VIP TAG ===== */
-.vip-tag{
+/* VIP TAG */
+.vip{
+  position:relative;
+}
+.vip::after{
+  content:"VIP";
   position:absolute;
   top:20px;
   right:20px;
   background:#ff0000;
-  padding:.4rem .8rem;
+  padding:.4rem .9rem;
   border-radius:20px;
   font-size:.75rem;
-  box-shadow:0 0 15px rgba(255,0,0,.7);
+  box-shadow:0 0 15px rgba(255,0,0,.8);
 }
 
-/* ===== FOOTER ===== */
+/* FOOTER */
 footer{
-  padding:4rem 2rem;
+  padding:3rem;
   text-align:center;
   background:#050712;
-}
-footer p{
-  opacity:.6;
-  font-size:.9rem;
+  opacity:.7;
 }
 </style>
 </head>
@@ -143,76 +132,61 @@ footer p{
 <div class="hero">
   <h1>Max Soccer ⚽</h1>
   <p>
-    Real-time football intelligence, live scores, predictions,
-    and exclusive Liverpool-focused insights trusted by thousands of fans worldwide.
+    Live football scores, Liverpool-focused news, match results and expert predictions —
+    trusted by real fans worldwide.
   </p>
-  <a href="login-register.html" class="vip-btn">Unlock VIP Predictions</a>
+  <a href="login-register.html">Unlock VIP Predictions</a>
 </div>
 
 <!-- LIVE HUB -->
 <section>
   <h2 class="section-title">Live Football Hub</h2>
-
-  <div class="grid">
-
-    <!-- FOOTBALL NEWS (ENHANCED + LINKED TO new.html) -->
-    <a href="new.html" class="card">
-      <img class="news-3d"
-        src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Football_3D_icon.svg"
-        alt="Football News 3D">
-      <h3>Breaking Football News</h3>
-      <p>Live Liverpool updates, transfer news, injuries and verified breaking headlines.</p>
-    </a>
-
-    <!-- RESULTS -->
-    <a href="results.html" class="card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Football_match.svg" alt="Live Results">
-      <h3>Live Results & Scores</h3>
-      <p>Real-time match results with live updates as goals happen.</p>
-    </a>
-
-    <!-- PREDICTIONS -->
-    <a href="prediction.html" class="card">
-      <span class="vip-tag">VIP</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Soccer_strategy.svg" alt="Predictions">
-      <h3>Expert Predictions</h3>
-      <p>AI-assisted predictions, form analysis, and odds insights.</p>
-    </a>
-
-  </div>
-</section>
-
-<!-- VIP SECTION -->
-<section>
-  <h2 class="section-title">Why Go VIP?</h2>
-
-  <div class="grid">
-
-    <div class="card">
-      <h3>🔥 Hot Predictions</h3>
-      <p>Access high-confidence predictions before public release.</p>
-    </div>
-
-    <div class="card">
-      <h3>📊 Advanced Match Data</h3>
-      <p>In-depth analytics, probability models, and exclusive stats.</p>
-    </div>
-
-    <div class="card">
-      <h3>⚡ Instant Alerts</h3>
-      <p>Get notified immediately when breaking Liverpool news drops.</p>
-    </div>
-
-  </div>
-
-  <div style="text-align:center;margin-top:4rem;">
-    <a href="login-register.html" class="vip-btn">Join Max Soccer VIP</a>
-  </div>
+  <div class="grid" id="mainGrid"></div>
 </section>
 
 <footer>
-  <p>© 2026 Max Soccer ⚽ — Built for real football fans</p>
+  © 2026 Max Soccer ⚽ — Built for real football fans
 </footer>
+
+<script>
+const grid = document.getElementById("mainGrid");
+
+// Uses SAME API source as results/news (NO broken images)
+async function loadHomepage(){
+  const res = await fetch("https://www.scorebat.com/video-api/v3/");
+  const data = await res.json();
+
+  // Find Liverpool-related match for thumbnails
+  const liverpoolMatch = data.response.find(
+    m => m.title.toLowerCase().includes("liverpool")
+  ) || data.response[0];
+
+  const img = liverpoolMatch.thumbnail;
+  const comp = liverpoolMatch.competition;
+
+  grid.innerHTML = `
+    <a href="news.html" class="card">
+      <img src="${img}" alt="Football News">
+      <h3>Football News</h3>
+      <p>Breaking Liverpool news, transfers, injuries and verified match updates.</p>
+    </a>
+
+    <a href="results.html" class="card">
+      <img src="${img}" alt="Live Results">
+      <h3>Live Results</h3>
+      <p>Real-time match scores, goal updates and full-time results.</p>
+    </a>
+
+    <a href="prediction.html" class="card vip">
+      <img src="${img}" alt="Predictions">
+      <h3>Expert Predictions</h3>
+      <p>Data-driven predictions, form analysis and VIP-only insights.</p>
+    </a>
+  `;
+}
+
+loadHomepage();
+</script>
 
 </body>
 </html>
