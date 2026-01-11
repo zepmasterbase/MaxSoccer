@@ -1,173 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF‑8">
-<meta name="viewport" content="width=device‑width,initial‑scale=1.0">
-<title>Max Soccer ⚽ | Live News & Highlights</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Max Soccer ⚽ | Liverpool News</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-  * { margin:0; padding:0; box-sizing:border‑box; font-family:'Orbitron',sans‑serif; }
-  body { background: linear-gradient(135deg,#0f0c29,#302b63,#24243e); color:#fff; }
-  header { padding:1rem 2rem; backdrop-filter:blur(5px); background:rgba(0,0,0,0.6); display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; }
-  header h2 { color:#ff0000; text-shadow:0 0 10px #ff0000; }
-  nav a { margin-left:1rem; font-weight:600; transition:0.3s; }
-  nav a:hover { color:#ff0000; }
-  .section { padding:2rem; }
-  .section-title { font-size:2rem; color:#ff0000; text-align:center; margin-bottom:1.5rem; text-transform:uppercase; letter-spacing:2px; }
-  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
-  .card { background:rgba(255,255,255,0.05); border-radius:12px; padding:1rem; backdrop-filter:blur(7px); transition:0.3s; position:relative; }
-  .card:hover { transform:translateY(-8px); box-shadow:0 10px 30px rgba(255,0,0,0.5); }
-  .card img { width:100%; border-radius:8px; }
-  .card .title { margin:0.5rem 0; font-size:1.1rem; font-weight:700; }
-  .alert { position:fixed; top:1rem; right:1rem; background:#ff0000; padding:1rem 1.5rem; border-radius:10px; display:none; animation:fadeInDown 0.5s; }
-  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px);} to { opacity:1; transform:translateY(0);} }
-  .vip‑badge { position:absolute; top:0.7rem; right:0.7rem; background:#ff0000; padding:0.3rem 0.6rem; font-size:0.8rem; border-radius:6px; cursor:pointer; }
-  #subscribeModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify‑content:center; align‑items:center; }
-  #subscribeModal .modal { background:#111; padding:1.5rem; border-radius:12px; text-align:center; }
-  #subscribeModal button { background:#ff0000; padding:0.8rem 1.2rem; border:none; border-radius:8px; font-weight:700; cursor:pointer; margin‑top:1rem; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+body{
+  background:radial-gradient(circle at top,#1b1f4b,#070a1f);
+  color:#fff;
+}
+
+/* HEADER */
+header{
+  padding:3rem 2rem;
+  text-align:center;
+}
+header h1{
+  font-size:3rem;
+  color:#ff0000;
+  text-shadow:0 0 25px rgba(255,0,0,.8);
+}
+header p{
+  margin-top:1rem;
+  opacity:.85;
+}
+
+/* SECTIONS */
+section{
+  padding:4rem 3rem;
+  max-width:1400px;
+  margin:auto;
+}
+.section-title{
+  font-size:2rem;
+  margin-bottom:2.5rem;
+  text-align:center;
+  color:#ff0000;
+  letter-spacing:2px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:2.5rem;
+}
+
+/* CARD */
+.card{
+  background:rgba(255,255,255,.07);
+  border-radius:25px;
+  padding:2rem;
+  backdrop-filter:blur(18px);
+  box-shadow:0 15px 40px rgba(0,0,0,.5);
+  transition:.4s;
+  animation:fadeUp .8s ease;
+}
+.card:hover{
+  transform:translateY(-12px);
+  box-shadow:0 25px 60px rgba(255,0,0,.4);
+}
+.card img{
+  width:100%;
+  border-radius:18px;
+  margin-bottom:1.2rem;
+}
+.card h3{
+  font-size:1.3rem;
+  margin-bottom:.8rem;
+}
+.card p{
+  opacity:.85;
+  line-height:1.6;
+}
+
+/* VIP LOCK */
+.vip{
+  position:relative;
+  overflow:hidden;
+}
+.vip img,
+.vip h3,
+.vip p{
+  filter:blur(6px);
+}
+.vip::after{
+  content:"🔒 VIP ONLY";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.5rem;
+  color:#ff0000;
+  letter-spacing:2px;
+  text-shadow:0 0 15px rgba(255,0,0,.8);
+}
+
+/* VIP BUTTON */
+.vip-cta{
+  display:inline-block;
+  margin-top:1.5rem;
+  padding:1rem 2.8rem;
+  background:linear-gradient(135deg,#ff0000,#ff4d4d);
+  color:#fff;
+  text-decoration:none;
+  border-radius:50px;
+  box-shadow:0 0 40px rgba(255,0,0,.6);
+  transition:.4s;
+}
+.vip-cta:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 70px rgba(255,0,0,.9);
+}
+
+/* ANIMATION */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:3rem;
+  background:#050712;
+  opacity:.7;
+}
 </style>
 </head>
-
 <body>
 
 <header>
-  <h2>Max Soccer ⚽ Live News</h2>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="vip.html">VIP</a>
-    <a href="login-register.html">Login/Register</a>
-  </nav>
+  <h1>Liverpool FC News 📰</h1>
+  <p>Latest verified updates, transfers, injuries & match reports</p>
 </header>
 
-<section class="section">
-  <h1 class="section-title">Latest Liverpool News & Highlights</h1>
-  <div class="cards" id="newsCards"></div>
+<!-- FREE NEWS -->
+<section>
+  <h2 class="section-title">Free Liverpool News</h2>
+
+  <div class="grid" id="freeNews">
+    <!-- JS inserts news -->
+  </div>
 </section>
 
-<!-- Alert Box -->
-<div class="alert" id="breakAlert"></div>
+<!-- VIP NEWS -->
+<section>
+  <h2 class="section-title">VIP Exclusive News 🔥</h2>
 
-<!-- Subscribe Modal -->
-<div id="subscribeModal">
-  <div class="modal">
-    <h3>Unlock VIP News!</h3>
-    <p>This story is VIP only. Subscribe now to get unlimited exclusive content.</p>
-    <button onclick="window.location.href='login-register.html'">Subscribe Now</button>
+  <div class="grid">
+    <div class="card vip">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Football_3D_icon.svg">
+      <h3>Insider Team Selection Leak</h3>
+      <p>Confirmed starting XI leaked hours before kickoff.</p>
+    </div>
+
+    <div class="card vip">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Football_strategy_3D.svg">
+      <h3>Private Injury Report</h3>
+      <p>Hidden fitness issues affecting Liverpool’s key players.</p>
+    </div>
   </div>
-</div>
+
+  <div style="text-align:center;margin-top:3rem;">
+    <a href="login-register.html" class="vip-cta">Unlock VIP News</a>
+  </div>
+</section>
+
+<footer>
+  © 2026 Max Soccer ⚽ — Liverpool News Intelligence
+</footer>
 
 <script>
-  // 🌐 Supabase Setup
-  const SUPABASE_URL = "YOUR_SUPABASE_URL";
-  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-  const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  const newsCardsEl = document.getElementById('newsCards');
-  const breakAlertEl = document.getElementById('breakAlert');
-  const subscribeModal = document.getElementById('subscribeModal');
-
-  let lastHeadlines = [];
-
-  // 📢 Show Break Alert
-  function showAlert(message){
-    breakAlertEl.textContent = message;
-    breakAlertEl.style.display = 'block';
-    setTimeout(()=> breakAlertEl.style.display = 'none', 4500);
+/* FREE LIVERPOOL NEWS (STATIC DEMO – SAFE FOR GITHUB) */
+const news = [
+  {
+    title:"Liverpool eye January reinforcement",
+    desc:"Klopp targets midfield depth as season intensifies.",
+    img:"https://upload.wikimedia.org/wikipedia/commons/0/0c/Soccer_ball.svg"
+  },
+  {
+    title:"Anfield set for massive clash",
+    desc:"Liverpool prepare for crucial top-four battle.",
+    img:"https://upload.wikimedia.org/wikipedia/commons/3/3a/Football_match.svg"
+  },
+  {
+    title:"Injury update ahead of weekend",
+    desc:"Latest medical report gives fans relief.",
+    img:"https://upload.wikimedia.org/wikipedia/commons/8/8c/Soccer_strategy.svg"
   }
+];
 
-  // 👉 Check if user is logged in
-  async function getCurrentUser(){
-    const { data: { session }} = await supabase.auth.getSession();
-    return session?.user ?? null;
-  }
+const container = document.getElementById("freeNews");
 
-  // 👑 Fetch VIP news from Supabase
-  async function fetchVIPNews(){
-    const { data, error } = await supabase.from('vip_news').select('*').order('published_at', {ascending:false});
-    if(error) console.error(error);
-    return data || [];
-  }
-
-  // 📰 Fetch Public Liverpool news (NewsAPI)
-  async function fetchPublicNews(){
-    try {
-      const NEWS_API_KEY = "YOUR_NEWSAPI_KEY"; // NewsAPI key
-      const res = await axios.get(`https://newsapi.org/v2/everything?q=Liverpool%20FC&sortBy=publishedAt&language=en&pageSize=10&apiKey=${NEWS_API_KEY}`);
-      return res.data.articles;
-    } catch(err) {
-      console.error('Public news fetch failed',err);
-      return [];
-    }
-  }
-
-  // ⚽ Fetch live match highlights (from your highlight provider)
-  async function fetchLiveHighlights(){
-    try {
-      const res = await axios.get('https://YOUR_LIVE_HIGHLIGHTS_API_ENDPOINT'); 
-      return res.data.highlights || [];
-    } catch(err) {
-      console.error('No highlight API or failed', err);
-      return [];
-    }
-  }
-
-  // 🛠 Render news and highlights
-  async function renderNews(){
-    const user = await getCurrentUser();
-    const publicNews = await fetchPublicNews();
-    const vipNews = user ? await fetchVIPNews() : [];
-
-    const highlights = await fetchLiveHighlights();
-
-    newsCardsEl.innerHTML = '';
-
-    // Mix public and VIP, VIP prioritized if logged in
-    const allNews = [
-      ...vipNews.map(n=>({ ...n, vip:true })),
-      ...publicNews.map(n=>({ title:n.title, desc:n.description, url:n.url, image:n.urlToImage, vip:false }))
-    ];
-
-    allNews.forEach(item=>{
-      const card = document.createElement('div');
-      card.className = 'card';
-
-      // VIP badge
-      if(item.vip){
-        const badge = document.createElement('div');
-        badge.className = 'vip-badge';
-        badge.textContent = 'VIP';
-        badge.onclick = () => {
-          if(!user) subscribeModal.style.display = 'flex';
-        }
-        card.appendChild(badge);
-      }
-
-      // image
-      const imgUrl = item.image || (highlights.find(h=>h.match_title?.includes('Liverpool'))?.gif_url);
-      card.innerHTML += `<img src="${imgUrl||'https://via.placeholder.com/400x220?text=No+Image'}" alt="News Image">`;
-
-      card.innerHTML += `<div class="title">${item.title}</div>`;
-      card.innerHTML += `<p>${item.desc?.slice(0,100) || ''}…</p>`;
-      card.innerHTML += `<a href="${item.url||'#'}" target="_blank">Read More</a>`;
-
-      newsCardsEl.appendChild(card);
-    });
-
-    // Check for breaking news
-    if(allNews[0] && allNews[0].title !== lastHeadlines[0]){
-      showAlert("🚨 Breaking Liverpool News: " + allNews[0].title);
-      lastHeadlines = allNews.map(n=>n.title);
-    }
-  }
-
-  // Auto‑refresh news every 45 seconds
-  renderNews();
-  setInterval(renderNews, 45000);
-
+news.forEach(n=>{
+  container.innerHTML += `
+    <div class="card">
+      <img src="${n.img}">
+      <h3>${n.title}</h3>
+      <p>${n.desc}</p>
+    </div>
+  `;
+});
 </script>
 
 </body>
