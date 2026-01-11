@@ -3,143 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Max Soccer ⚽ | Match Results</title>
+<title>Max Soccer ⚽ | Live Results</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family:'Orbitron',sans-serif; }
-  body { background: linear-gradient(135deg,#0f0c29,#302b63,#24243e); color:#fff; min-height:100vh; }
-  header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; backdrop-filter:blur(5px); background:rgba(0,0,0,0.6); position:sticky; top:0; }
-  header h2 { color:#ff0000; text-shadow:0 0 10px #ff0000; }
-  nav a { margin-left:1rem; font-weight:600; transition:0.3s; }
-  nav a:hover { color:#ff0000; }
-  section { padding:3rem 2rem; }
-  .section-title { font-size:2rem; text-align:center; color:#ff0000; margin-bottom:2rem; text-transform:uppercase; letter-spacing:2px; }
-  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
-  .card { background:rgba(255,255,255,0.05); border-radius:12px; padding:1.5rem; backdrop-filter:blur(7px); transition: transform 0.3s, box-shadow 0.3s; position:relative; }
-  .card:hover { transform:translateY(-8px); box-shadow:0 10px 30px rgba(255,0,0,0.5); }
-  .card h3 { font-size:1.2rem; margin-bottom:0.5rem; }
-  .card p { font-size:1rem; margin-bottom:0.3rem; }
-  .vip-badge { position:absolute; top:0.5rem; right:0.5rem; background:#ff0000; padding:0.3rem 0.6rem; font-size:0.8rem; border-radius:6px; cursor:pointer; }
-  .alert { position:fixed; top:1rem; right:1rem; background:#ff0000; padding:1rem 1.5rem; border-radius:10px; display:none; animation:fadeInDown 0.5s; }
-  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px);} to { opacity:1; transform:translateY(0);} }
-  #subscribeModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; }
-  #subscribeModal .modal { background:#111; padding:1.5rem; border-radius:12px; text-align:center; }
-  #subscribeModal button { background:#ff0000; padding:0.8rem 1.2rem; border:none; border-radius:8px; font-weight:700; cursor:pointer; margin-top:1rem; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+body{
+  background:radial-gradient(circle at top,#1b1f4b,#070a1f);
+  color:#fff;
+  scroll-behavior:smooth;
+}
+
+/* HEADER */
+header{
+  padding:3rem 2rem;
+  text-align:center;
+}
+header h1{
+  font-size:3rem;
+  color:#ff0000;
+  text-shadow:0 0 25px rgba(255,0,0,.8);
+}
+header p{
+  margin-top:1rem;
+  opacity:.85;
+}
+
+/* SECTION */
+section{
+  padding:4rem 3rem;
+  max-width:1400px;
+  margin:auto;
+}
+.section-title{
+  text-align:center;
+  font-size:2.2rem;
+  color:#ff0000;
+  margin-bottom:3rem;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:2.5rem;
+}
+
+/* RESULT CARD */
+.card{
+  background:rgba(255,255,255,.07);
+  border-radius:25px;
+  padding:2rem;
+  backdrop-filter:blur(18px);
+  box-shadow:0 15px 40px rgba(0,0,0,.5);
+  transition:.4s;
+  animation:fadeUp .8s ease;
+}
+.card:hover{
+  transform:translateY(-12px);
+  box-shadow:0 25px 60px rgba(255,0,0,.4);
+}
+.card img{
+  width:100%;
+  border-radius:18px;
+  margin-bottom:1.2rem;
+}
+.card h3{
+  font-size:1.3rem;
+  margin-bottom:.6rem;
+}
+.card .score{
+  font-size:1.5rem;
+  color:#ff4d4d;
+  margin:.6rem 0;
+}
+.card small{
+  opacity:.7;
+}
+
+/* LIVE BADGE */
+.live{
+  display:inline-block;
+  margin-bottom:.6rem;
+  padding:.25rem .8rem;
+  background:#ff0000;
+  border-radius:20px;
+  font-size:.7rem;
+  box-shadow:0 0 12px rgba(255,0,0,.8);
+}
+
+/* ANIMATION */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:3rem;
+  background:#050712;
+  opacity:.7;
+}
 </style>
 </head>
 <body>
 
 <header>
-  <h2>Max Soccer ⚽ Match Results</h2>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="news.html">News</a>
-    <a href="predictions.html">Predictions</a>
-    <a href="vip.html">VIP</a>
-    <a href="login-register.html">Login/Register</a>
-  </nav>
+  <h1>Live Football Results ⚽</h1>
+  <p>Real-time match results updated automatically</p>
 </header>
 
 <section>
-  <h1 class="section-title">Recent Matches & Results</h1>
-  <div class="cards" id="resultsCards"></div>
+  <h2 class="section-title">Latest Matches</h2>
+  <div class="grid" id="resultsGrid"></div>
 </section>
 
-<!-- Alert Box -->
-<div class="alert" id="resultAlert"></div>
-
-<!-- Subscribe Modal -->
-<div id="subscribeModal">
-  <div class="modal">
-    <h3>VIP-Only Results</h3>
-    <p>This match result is VIP-only. Subscribe now to unlock all content!</p>
-    <button onclick="window.location.href='login-register.html'">Subscribe Now</button>
-  </div>
-</div>
+<footer>
+  © 2026 Max Soccer ⚽ — Live Results Engine
+</footer>
 
 <script>
-  // 🌐 Supabase Setup
-  const SUPABASE_URL = "YOUR_SUPABASE_URL";
-  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-  const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const grid = document.getElementById("resultsGrid");
 
-  const resultsCards = document.getElementById('resultsCards');
-  const resultAlert = document.getElementById('resultAlert');
-  const subscribeModal = document.getElementById('subscribeModal');
+async function fetchResults(){
+  try{
+    const res = await fetch("https://www.scorebat.com/video-api/v3/");
+    const data = await res.json();
 
-  let lastResults = [];
+    grid.innerHTML = "";
 
-  // Get current logged-in user
-  async function getCurrentUser(){
-    const { data: { session } } = await supabase.auth.getSession();
-    return session?.user ?? null;
-  }
-
-  // Fetch public results
-  async function fetchPublicResults(){
-    const { data, error } = await supabase.from('match_results').select('*').order('match_date',{ascending:false});
-    if(error) console.error(error);
-    return data || [];
-  }
-
-  // Fetch VIP-only results
-  async function fetchVIPResults(){
-    const { data, error } = await supabase.from('vip_results').select('*').order('match_date',{ascending:false});
-    if(error) console.error(error);
-    return data || [];
-  }
-
-  // Show push alert
-  function showAlert(message){
-    resultAlert.textContent = message;
-    resultAlert.style.display = 'block';
-    setTimeout(()=> resultAlert.style.display='none',4000);
-  }
-
-  // Render results
-  async function renderResults(){
-    const user = await getCurrentUser();
-    const publicResults = await fetchPublicResults();
-    const vipResults = user ? await fetchVIPResults() : [];
-
-    const allResults = [
-      ...vipResults.map(r => ({...r,vip:true})),
-      ...publicResults.map(r => ({...r,vip:false}))
-    ];
-
-    resultsCards.innerHTML = '';
-    allResults.forEach(match=>{
-      const card = document.createElement('div');
-      card.className = 'card';
-
-      if(match.vip){
-        const badge = document.createElement('div');
-        badge.className = 'vip-badge';
-        badge.textContent = 'VIP';
-        badge.onclick = () => {
-          if(!user) subscribeModal.style.display='flex';
-        }
-        card.appendChild(badge);
-      }
-
-      card.innerHTML += `<h3>${match.home_team} ${match.home_score} - ${match.away_score} ${match.away_team}</h3>`;
-      card.innerHTML += `<p>Status: ${match.status}</p>`;
-      card.innerHTML += `<small>Match Date: ${new Date(match.match_date).toLocaleString()}</small>`;
-      resultsCards.appendChild(card);
+    data.response.slice(0,12).forEach(match=>{
+      grid.innerHTML += `
+        <div class="card">
+          <span class="live">LIVE / RECENT</span>
+          <img src="${match.thumbnail}" alt="Match">
+          <h3>${match.title}</h3>
+          <div class="score">${match.score || "Score Updating..."}</div>
+          <small>${match.competition}</small>
+        </div>
+      `;
     });
 
-    // Alert for new top result
-    if(allResults[0] && allResults[0].home_team !== lastResults[0]){
-      showAlert(`New Result: ${allResults[0].home_team} ${allResults[0].home_score}-${allResults[0].away_score} ${allResults[0].away_team}`);
-      lastResults = allResults.map(r => r.home_team + r.away_team);
-    }
+  }catch(err){
+    grid.innerHTML = "<p style='text-align:center'>Unable to load live results.</p>";
+    console.error(err);
   }
+}
 
-  // Auto-refresh every 45 seconds
-  renderResults();
-  setInterval(renderResults,45000);
+// Initial load
+fetchResults();
+
+// Auto refresh every 60 seconds
+setInterval(fetchResults,60000);
 </script>
 
 </body>
