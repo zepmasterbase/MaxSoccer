@@ -22,6 +22,14 @@ body{
   padding:2rem;
 }
 
+/* ===== PAGE TITLE ===== */
+h1{
+  text-align:center;
+  margin-bottom:3rem;
+  color:#ff0000;
+  text-shadow:0 0 25px rgba(255,0,0,.8);
+}
+
 /* ===== ROLE CARDS ===== */
 .container{
   display:grid;
@@ -31,7 +39,6 @@ body{
   width:100%;
   margin-bottom:3rem;
 }
-
 .role-card{
   background:rgba(255,255,255,.07);
   backdrop-filter:blur(18px);
@@ -76,7 +83,7 @@ body{
   padding:3rem 2.5rem;
   border-radius:30px;
   width:100%;
-  max-width:420px;
+  max-width:450px;
   box-shadow:0 0 70px rgba(255,0,0,.6);
   text-align:center;
   position:relative;
@@ -118,7 +125,7 @@ body{
 </head>
 <body>
 
-<h1 style="text-align:center;margin-bottom:2rem;color:#ff0000;text-shadow:0 0 20px #ff0000;">Max Soccer ⚽</h1>
+<h1>Max Soccer ⚽</h1>
 
 <div class="container">
   <div class="role-card">
@@ -142,7 +149,7 @@ body{
 
     <input type="email" id="email" placeholder="Email">
     <input type="password" id="password" placeholder="Password">
-    <input type="text" id="promo" placeholder="Promo Code (optional)" style="display:none">
+    <input type="text" id="promo" placeholder="Promo Code (Optional)" style="display:none">
 
     <button onclick="handleAuth()">Continue</button>
     <div class="switch" onclick="toggleMode()">Switch to Register</div>
@@ -150,7 +157,7 @@ body{
 </div>
 
 <script>
-/* ===== SUPABASE ===== */
+/* ===== SUPABASE INIT ===== */
 const supabase = supabaseJs.createClient("SUPABASE_URL","SUPABASE_ANON_KEY");
 let role = "vip";
 let mode = "login";
@@ -167,7 +174,7 @@ function closeModal(){document.getElementById("authModal").style.display="none"}
 function toggleMode(){mode = mode==='login' ? 'register':'login'; updateModal()}
 function updateModal(){document.getElementById("modalTitle").textContent = `${mode==='login'?'Login':'Register'} as ${role.toUpperCase()}`}
 
-/* ===== HANDLE AUTH ===== */
+/* ===== AUTH + VIP PAYMENT ===== */
 async function handleAuth(){
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -196,41 +203,35 @@ async function handleAuth(){
   if(role==='ambassador'){
     window.location.href = "ambassador.html";
   } else {
-    /* VIP PAYWALL */
-    payVIP(data.id,promo);
-  }
-}
+    /* VIP PAYMENT FLOW */
+    FlutterwaveCheckout({
+      public_key: "FLWPUBK_TEST-XXXXXXX",
+      tx_ref: "MAXSOCCER_" + Date.now(),
+      amount: 10,
+      currency: "USD",
+      payment_options: "card",
+      customer: {email: email},
+      callback: async function(data){
+        // MARK VIP ACTIVE
+        await supabase.from("profiles").update({is_vip:true}).eq("id",data.tx_ref.split("_")[1]);
 
-/* ===== VIP PAYMENT FLOW ===== */
-function payVIP(userId,promo){
-  FlutterwaveCheckout({
-    public_key: "FLWPUBK_TEST-XXXXXXX",
-    tx_ref: "MAXSOCCER_" + Date.now(),
-    amount: 10,
-    currency: "USD",
-    payment_options: "card",
-    customer: {email: document.getElementById("email").value},
-    callback: async function (data) {
-      // MARK VIP ACTIVE IN SUPABASE
-      await supabase.from("profiles").update({is_vip:true}).eq("id",userId);
-
-      // APPLY PROMO CODE BONUS (if entered)
-      if(promo){
-        const refUser = await supabase.from("profiles").select("*").eq("promo_code",promo).single();
-        if(refUser.data){
-          const current = refUser.data.wallet || 0;
-          await supabase.from("profiles").update({wallet: current + 1}).eq("id",refUser.data.id);
+        // Apply promo code bonus
+        if(promo){
+          const refUser = await supabase.from("profiles").select("*").eq("promo_code",promo).single();
+          if(refUser.data){
+            const current = refUser.data.wallet || 0;
+            await supabase.from("profiles").update({wallet: current + 1}).eq("id",refUser.data.id);
+          }
         }
-      }
 
-      // Redirect to VIP dashboard
-      window.location.href = "VIP.html";
-    },
-    customizations: {
-      title: "Max Soccer VIP",
-      description: "Monthly VIP Subscription",
-    }
-  });
+        window.location.href = "VIP.html";
+      },
+      customizations: {
+        title: "Max Soccer VIP",
+        description: "Monthly VIP Subscription"
+      }
+    });
+  }
 }
 </script>
 
