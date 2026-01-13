@@ -4,60 +4,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Max Soccer ⚽ | Live Football Hub</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+
 body{
   background:radial-gradient(circle at top,#1b1f4b,#070a1f);
   color:#fff;
-  scroll-behavior:smooth;
+  overflow-x:hidden;
 }
 
 /* HERO */
 .hero{
-  padding:6rem 2rem;
+  padding:6rem 2rem 4rem;
   text-align:center;
 }
 .hero h1{
-  font-size:3.4rem;
+  font-size:3.6rem;
   color:#ff0000;
-  text-shadow:0 0 25px rgba(255,0,0,.85);
+  text-shadow:0 0 30px rgba(255,0,0,.85);
 }
 .hero p{
-  max-width:750px;
-  margin:1.5rem auto 0;
+  max-width:780px;
+  margin:1.6rem auto 0;
   font-size:1.15rem;
   opacity:.9;
+  line-height:1.7;
 }
-.hero .buttons{
-  margin-top:3rem;
-  display:flex;
-  justify-content:center;
-  gap:1.5rem;
-  flex-wrap:wrap;
+.hero .cta{
+  margin-top:3.2rem;
 }
-.hero a{
+.hero .cta a{
   display:inline-block;
-  padding:1.3rem 3rem;
+  padding:1.3rem 3.6rem;
   background:linear-gradient(135deg,#ff0000,#ff4d4d);
+  border-radius:50px;
   color:#fff;
   text-decoration:none;
-  border-radius:50px;
   font-size:1.2rem;
-  box-shadow:0 0 45px rgba(255,0,0,.7);
+  box-shadow:0 0 50px rgba(255,0,0,.75);
   transition:.4s;
 }
-.hero a:hover{
+.hero .cta a:hover{
   transform:scale(1.08);
-  box-shadow:0 0 75px rgba(255,0,0,.9);
+  box-shadow:0 0 80px rgba(255,0,0,.95);
 }
 
 /* LIVE USERS */
 .live-users{
   display:inline-block;
-  margin-top:2rem;
-  padding:0.9rem 2rem;
+  margin-top:2.2rem;
+  padding:.9rem 2.2rem;
   border-radius:40px;
   background:rgba(255,255,255,.08);
   backdrop-filter:blur(12px);
@@ -78,9 +77,10 @@ section{
 }
 .section-title{
   text-align:center;
-  font-size:2.2rem;
-  margin-bottom:3.5rem;
+  font-size:2.3rem;
+  margin-bottom:3.8rem;
   color:#ff0000;
+  text-shadow:0 0 18px rgba(255,0,0,.6);
 }
 
 /* GRID */
@@ -93,93 +93,59 @@ section{
 /* CARD */
 .card{
   background:rgba(255,255,255,.07);
-  border-radius:25px;
-  padding:1.7rem;
+  border-radius:26px;
+  padding:1.8rem;
   text-decoration:none;
   color:#fff;
   backdrop-filter:blur(18px);
-  box-shadow:0 15px 40px rgba(0,0,0,.5);
-  transition:.4s;
-  text-align:center;
+  box-shadow:0 18px 45px rgba(0,0,0,.55);
+  transition:.45s;
+  position:relative;
 }
 .card:hover{
-  transform:translateY(-14px);
-  box-shadow:0 28px 65px rgba(255,0,0,.45);
+  transform:translateY(-16px);
+  box-shadow:0 35px 80px rgba(255,0,0,.45);
 }
 .card img{
   width:100%;
   border-radius:18px;
-  margin-bottom:1.3rem;
-  transform:perspective(900px) rotateX(7deg);
-  transition:.4s;
+  margin-bottom:1.4rem;
+  transform:perspective(1000px) rotateX(8deg);
+  transition:.45s;
 }
 .card:hover img{
-  transform:perspective(900px) rotateX(0deg) scale(1.05);
+  transform:perspective(1000px) rotateX(0deg) scale(1.06);
 }
 .card h3{
-  font-size:1.35rem;
-  margin-bottom:.6rem;
+  font-size:1.4rem;
+  margin-bottom:.7rem;
 }
 .card p{
-  opacity:.85;
+  opacity:.88;
   line-height:1.6;
+  font-size:.95rem;
 }
 
 /* VIP TAG */
-.vip{
-  position:relative;
-}
 .vip::after{
   content:"VIP";
   position:absolute;
   top:20px;
   right:20px;
   background:#ff0000;
-  padding:.4rem .9rem;
+  padding:.4rem 1rem;
   border-radius:20px;
   font-size:.75rem;
-  box-shadow:0 0 15px rgba(255,0,0,.8);
+  box-shadow:0 0 18px rgba(255,0,0,.9);
 }
 
 /* AMBASSADOR CARD */
-.ambassador-card{
-  background:rgba(255,255,255,.05);
-  border-radius:25px;
-  padding:2rem;
-  margin-top:3rem;
-  text-align:center;
-  box-shadow:0 0 35px rgba(255,0,0,.5);
-  backdrop-filter:blur(20px);
-  animation:pulse 2s infinite;
+.ambassador{
+  background:linear-gradient(145deg,rgba(255,0,0,.2),rgba(0,0,0,.4));
+  border:1px solid rgba(255,0,0,.4);
 }
-.ambassador-card h3{
-  font-size:1.5rem;
-  margin-bottom:1rem;
+.ambassador strong{
   color:#ff4d4d;
-}
-.ambassador-card p{
-  font-size:1rem;
-  opacity:.85;
-  margin-bottom:1.5rem;
-}
-.ambassador-card a{
-  display:inline-block;
-  padding:1rem 2.5rem;
-  background:linear-gradient(135deg,#ff0000,#ff4d4d);
-  color:#fff;
-  border-radius:50px;
-  text-decoration:none;
-  font-weight:700;
-  transition:.3s;
-}
-.ambassador-card a:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 50px rgba(255,0,0,.7);
-}
-
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 35px rgba(255,0,0,.5);}
-  50%{box-shadow:0 0 55px rgba(255,0,0,.8);}
 }
 
 /* FOOTER */
@@ -188,97 +154,99 @@ footer{
   text-align:center;
   background:#050712;
   opacity:.7;
+  font-size:.9rem;
 }
 </style>
 </head>
+
 <body>
 
 <!-- HERO -->
 <div class="hero">
   <h1>Max Soccer ⚽</h1>
   <p>
-    Live football scores, Liverpool-focused news, match results and expert predictions —
-    trusted by fans worldwide.
+    Your elite football hub for live scores, Liverpool-focused news,
+    verified results and AI-powered predictions — built for real fans.
   </p>
 
-  <!-- LIVE USERS -->
   <div class="live-users">
     🔴 <span id="userCount">28,939</span> fans online now
   </div>
 
-  <div class="buttons">
+  <div class="cta">
     <a href="login-register.html">Unlock VIP Predictions</a>
-    <a href="login-register.html">Become an Ambassador ⚽</a>
   </div>
 </div>
 
 <!-- LIVE HUB -->
 <section>
   <h2 class="section-title">Live Football Hub</h2>
-  <div class="grid" id="mainGrid"></div>
+  <div class="grid" id="hubGrid"></div>
 </section>
-
-<!-- AMBASSADOR CTA CARD -->
-<div class="ambassador-card">
-  <h3>Join Max Soccer Ambassadors!</h3>
-  <p>Share your promo code & earn 10% on every VIP subscription. Start your ambassador journey today!</p>
-  <a href="login-register.html">Sign Up as Ambassador</a>
-</div>
 
 <footer>
   © 2026 Max Soccer ⚽ — Built for real football fans
 </footer>
 
 <script>
-const grid = document.getElementById("mainGrid");
+/* LIVE USERS COUNTER */
+let users = 28939;
 const userEl = document.getElementById("userCount");
 
-// ==== SIMULATED LIVE USERS COUNTER ====
-let users = 28939;
 setInterval(() => {
-  const change = Math.floor(Math.random() * 5);
-  users += Math.random() > 0.5 ? change : -1;
+  const change = Math.floor(Math.random() * 6);
+  users += Math.random() > 0.45 ? change : -1;
   userEl.textContent = users.toLocaleString();
-}, 3000);
+}, 2600);
 
-// ==== LOAD LIVE HUB CARDS ====
-async function loadHomepage(){
+/* LOAD LIVE CONTENT */
+const grid = document.getElementById("hubGrid");
+
+async function loadHub(){
   try{
     const res = await fetch("https://www.scorebat.com/video-api/v3/");
     const data = await res.json();
 
-    const liverpoolMatch = data.response.find(
-      m => m.title.toLowerCase().includes("liverpool")
+    const lfc = data.response.find(m =>
+      m.title.toLowerCase().includes("liverpool")
     ) || data.response[0];
 
-    const img = liverpoolMatch.thumbnail;
+    const img = lfc.thumbnail;
 
     grid.innerHTML = `
-      <a href="new.html" class="card">
+      <a href="news.html" class="card">
         <img src="${img}" alt="Football News">
         <h3>Football News</h3>
-        <p>Breaking Liverpool news, transfers, injuries and verified match updates.</p>
+        <p>Breaking Liverpool news, transfers, injuries and verified updates.</p>
       </a>
 
       <a href="results.html" class="card">
         <img src="${img}" alt="Live Results">
         <h3>Live Results</h3>
-        <p>Real-time match scores, goal updates and full-time results.</p>
+        <p>Real-time scores, goals, match timelines and full-time stats.</p>
       </a>
 
       <a href="prediction.html" class="card vip">
         <img src="${img}" alt="Predictions">
-        <h3>Expert Predictions</h3>
-        <p>Data-driven predictions, form analysis and VIP-only insights.</p>
+        <h3>AI Predictions</h3>
+        <p>Data-driven predictions, probabilities and VIP insights.</p>
+      </a>
+
+      <a href="login-register.html" class="card ambassador">
+        <img src="${img}" alt="Ambassador Program">
+        <h3>Become an Ambassador</h3>
+        <p>
+          Earn <strong>10% commission</strong> on every VIP subscription.
+          Track referrals and grow with Max Soccer.
+        </p>
       </a>
     `;
-  }catch(err){
-    grid.innerHTML='<p style="text-align:center;">Unable to load live content.</p>';
-    console.error(err);
+  }catch(e){
+    console.error(e);
   }
 }
 
-loadHomepage();
+loadHub();
 </script>
 
 </body>
