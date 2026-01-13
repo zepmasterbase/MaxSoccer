@@ -7,6 +7,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://checkout.flutterwave.com/v3.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
@@ -37,6 +38,7 @@ body{
   text-align:center;
   box-shadow:0 25px 60px rgba(0,0,0,.6);
   transition:.4s;
+  cursor:pointer;
 }
 .role-card:hover{
   transform:translateY(-12px);
@@ -82,6 +84,7 @@ body{
   max-width:420px;
   box-shadow:0 0 70px rgba(255,0,0,.6);
   text-align:center;
+  position:relative;
 }
 .modal-content h3{
   color:#ff0000;
@@ -126,17 +129,17 @@ body{
 <div class="container">
 
   <!-- VIP CARD -->
-  <div class="role-card">
+  <div class="role-card" onclick="openModal('vip')">
     <h2>VIP Access 🔐</h2>
-    <p>Unlock AI predictions, insider news and advanced stats.</p>
-    <button onclick="openModal('vip')">Login / Register</button>
+    <p>Unlock AI predictions, insider news, and advanced stats.</p>
+    <button>Login / Register</button>
   </div>
 
   <!-- AMBASSADOR CARD -->
-  <div class="role-card">
+  <div class="role-card" onclick="openModal('ambassador')">
     <h2>Ambassador 🤝</h2>
     <p>Earn 10% commission by sharing your promo code.</p>
-    <button onclick="openModal('ambassador')">Become Ambassador</button>
+    <button>Become Ambassador</button>
   </div>
 
 </div>
@@ -150,7 +153,7 @@ body{
     <input type="email" id="email" placeholder="Email">
     <input type="password" id="password" placeholder="Password">
 
-    <button onclick="handleAuth()">Continue</button>
+    <button id="authBtn" onclick="handleAuth()">Continue</button>
     <div class="switch" onclick="toggleMode()">Switch to Register</div>
   </div>
 </div>
@@ -165,7 +168,7 @@ const supabase = supabaseJs.createClient(
 let role = "vip";
 let mode = "login";
 
-/* ===== MODAL ===== */
+/* ===== MODAL LOGIC ===== */
 function openModal(selectedRole){
   role = selectedRole;
   mode = "login";
@@ -184,19 +187,20 @@ function updateModal(){
     `${mode === "login" ? "Login" : "Register"} as ${role.toUpperCase()}`;
 }
 
-/* ===== AUTH ===== */
+/* ===== AUTH FUNCTION ===== */
 async function handleAuth(){
-  const email = email.value;
-  const password = password.value;
-
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
   let response;
+
   if(mode === "register"){
     response = await supabase.auth.signUp({ email, password });
     if(!response.error){
       await supabase.from("profiles").insert({
         id: response.data.user.id,
         role: role,
-        is_vip: false
+        is_vip: false,
+        wallet: 0
       });
     }
   }else{
@@ -214,16 +218,39 @@ async function handleAuth(){
     .eq("id", response.data.user.id)
     .single();
 
-  /* ROLE ROUTING */
+  /* ROLE BASED REDIRECT */
   if(data.role === "ambassador"){
     window.location.href = "ambassador.html";
-  }else{
-    if(data.is_vip){
+  } else if(data.role === "vip"){
+    if(!data.is_vip){
+      // Trigger Flutterwave payment
+      payVIP(data.id);
+    } else {
       window.location.href = "VIP.html";
-    }else{
-      window.location.href = "VIP.html"; // locked state → payment inside VIP.html
     }
   }
+}
+
+/* ===== FLUTTERWAVE PAYMENT ===== */
+function payVIP(userId){
+  FlutterwaveCheckout({
+    public_key: "FLWPUBK_TEST-XXXXXXX",
+    tx_ref: "MAXSOCCER_"+Date.now(),
+    amount: 10,
+    currency: "USD",
+    payment_options: "card",
+    customer: { email: document.getElementById("email").value },
+    callback: async function (data) {
+      // Mark VIP true in Supabase after successful payment
+      await supabase.from("profiles").update({ is_vip:true })
+        .eq("id", userId);
+      window.location.href = "VIP.html";
+    },
+    customizations: {
+      title: "Max Soccer VIP",
+      description: "Monthly VIP Subscription"
+    }
+  });
 }
 </script>
 
