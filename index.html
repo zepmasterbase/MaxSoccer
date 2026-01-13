@@ -1,62 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Max Soccer ⚽ | Live Football Hub</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Max Soccer ⚽ | Live Hub</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://checkout.flutterwave.com/v3.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
-
 body{
+  min-height:100vh;
   background:radial-gradient(circle at top,#1b1f4b,#070a1f);
   color:#fff;
-  overflow-x:hidden;
+  scroll-behavior:smooth;
 }
 
-/* HERO */
+/* ===== HERO ===== */
 .hero{
-  padding:6rem 2rem 4rem;
+  padding:6rem 2rem;
   text-align:center;
 }
 .hero h1{
-  font-size:3.6rem;
+  font-size:3.4rem;
   color:#ff0000;
-  text-shadow:0 0 30px rgba(255,0,0,.85);
+  text-shadow:0 0 25px rgba(255,0,0,.85);
 }
 .hero p{
-  max-width:780px;
-  margin:1.6rem auto 0;
-  font-size:1.15rem;
-  opacity:.9;
-  line-height:1.7;
-}
-.hero .cta{
-  margin-top:3.2rem;
-}
-.hero .cta a{
-  display:inline-block;
-  padding:1.3rem 3.6rem;
-  background:linear-gradient(135deg,#ff0000,#ff4d4d);
-  border-radius:50px;
-  color:#fff;
-  text-decoration:none;
+  max-width:750px;
+  margin:1.5rem auto;
   font-size:1.2rem;
-  box-shadow:0 0 50px rgba(255,0,0,.75);
-  transition:.4s;
+  opacity:.9;
 }
-.hero .cta a:hover{
-  transform:scale(1.08);
-  box-shadow:0 0 80px rgba(255,0,0,.95);
-}
-
-/* LIVE USERS */
 .live-users{
+  margin-top:2rem;
   display:inline-block;
-  margin-top:2.2rem;
-  padding:.9rem 2.2rem;
+  padding:.9rem 2rem;
   border-radius:40px;
   background:rgba(255,255,255,.08);
   backdrop-filter:blur(12px);
@@ -69,185 +50,269 @@ body{
   text-shadow:0 0 10px rgba(255,0,0,.8);
 }
 
-/* SECTION */
-section{
-  padding:5rem 3rem;
-  max-width:1400px;
-  margin:auto;
-}
-.section-title{
-  text-align:center;
-  font-size:2.3rem;
-  margin-bottom:3.8rem;
-  color:#ff0000;
-  text-shadow:0 0 18px rgba(255,0,0,.6);
-}
-
-/* GRID */
+/* ===== ROLE CARDS ===== */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
   gap:3rem;
+  padding:5rem 2rem;
+  max-width:1200px;
+  margin:auto;
 }
-
-/* CARD */
 .card{
   background:rgba(255,255,255,.07);
-  border-radius:26px;
-  padding:1.8rem;
+  border-radius:25px;
+  padding:2rem;
   text-decoration:none;
   color:#fff;
   backdrop-filter:blur(18px);
-  box-shadow:0 18px 45px rgba(0,0,0,.55);
-  transition:.45s;
+  box-shadow:0 15px 50px rgba(0,0,0,.6);
+  transition:.4s;
+  text-align:center;
   position:relative;
 }
 .card:hover{
-  transform:translateY(-16px);
-  box-shadow:0 35px 80px rgba(255,0,0,.45);
+  transform:translateY(-14px);
+  box-shadow:0 28px 65px rgba(255,0,0,.45);
 }
 .card img{
-  width:100%;
-  border-radius:18px;
-  margin-bottom:1.4rem;
-  transform:perspective(1000px) rotateX(8deg);
-  transition:.45s;
+  width:120px;
+  margin-bottom:1.5rem;
+  transform:perspective(900px) rotateX(7deg);
+  transition:.4s;
 }
 .card:hover img{
-  transform:perspective(1000px) rotateX(0deg) scale(1.06);
+  transform:perspective(900px) rotateX(0deg) scale(1.05);
 }
 .card h3{
   font-size:1.4rem;
   margin-bottom:.7rem;
 }
 .card p{
-  opacity:.88;
+  opacity:.85;
   line-height:1.6;
-  font-size:.95rem;
 }
 
 /* VIP TAG */
+.vip{
+  position:relative;
+}
 .vip::after{
   content:"VIP";
   position:absolute;
   top:20px;
   right:20px;
   background:#ff0000;
-  padding:.4rem 1rem;
+  padding:.4rem .9rem;
   border-radius:20px;
   font-size:.75rem;
-  box-shadow:0 0 18px rgba(255,0,0,.9);
+  box-shadow:0 0 15px rgba(255,0,0,.8);
 }
 
-/* AMBASSADOR CARD */
-.ambassador{
-  background:linear-gradient(145deg,rgba(255,0,0,.2),rgba(0,0,0,.4));
-  border:1px solid rgba(255,0,0,.4);
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
 }
-.ambassador strong{
-  color:#ff4d4d;
+.modal-content{
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(20px);
+  padding:3rem;
+  border-radius:30px;
+  width:100%;
+  max-width:400px;
+  box-shadow:0 0 70px rgba(255,0,0,.6);
+  text-align:center;
+  position:relative;
+}
+.modal-content h3{
+  color:#ff0000;
+  margin-bottom:1.5rem;
+}
+.modal-content input{
+  width:100%;
+  padding:1rem;
+  border-radius:12px;
+  border:none;
+  outline:none;
+  margin-bottom:1rem;
+}
+.modal-content button{
+  width:100%;
+  padding:1rem;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#ff0000,#ff4d4d);
+  color:#fff;
+  font-size:1.05rem;
+  cursor:pointer;
+  box-shadow:0 0 30px rgba(255,0,0,.7);
+}
+.close{
+  position:absolute;
+  top:15px;
+  right:20px;
+  font-size:1.8rem;
+  cursor:pointer;
+}
+.switch{
+  margin-top:1rem;
+  font-size:.85rem;
+  opacity:.8;
+  cursor:pointer;
 }
 
 /* FOOTER */
 footer{
-  padding:3rem;
+  padding:3rem 2rem;
   text-align:center;
   background:#050712;
   opacity:.7;
-  font-size:.9rem;
 }
 </style>
 </head>
-
 <body>
 
 <!-- HERO -->
 <div class="hero">
   <h1>Max Soccer ⚽</h1>
-  <p>
-    Your elite football hub for live scores, Liverpool-focused news,
-    verified results and AI-powered predictions — built for real fans.
-  </p>
+  <p>Live football scores, Liverpool-focused news, match results and expert predictions — trusted by real fans worldwide.</p>
 
-  <div class="live-users">
-    🔴 <span id="userCount">28,939</span> fans online now
+  <div class="live-users">🔴 <span id="userCount">28,939</span> fans online</div>
+</div>
+
+<!-- ROLE CARDS -->
+<div class="grid">
+  <div class="card vip">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Soccer_strategy.svg" alt="VIP Predictions">
+    <h3>VIP Access 🔐</h3>
+    <p>Unlock AI predictions, insider news, and live stats.</p>
+    <button onclick="openModal('vip')">Login / Register</button>
   </div>
 
-  <div class="cta">
-    <a href="login-register.html">Unlock VIP Predictions</a>
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Football_match.svg" alt="Live Hub">
+    <h3>Ambassador 🤝</h3>
+    <p>Share your promo code and earn 10% commission per referral.</p>
+    <button onclick="openModal('ambassador')">Become Ambassador</button>
   </div>
 </div>
 
-<!-- LIVE HUB -->
-<section>
-  <h2 class="section-title">Live Football Hub</h2>
-  <div class="grid" id="hubGrid"></div>
-</section>
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+  <div class="modal-content">
+    <div class="close" onclick="closeModal()">×</div>
+    <h3 id="modalTitle">Login</h3>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="handleAuth()">Continue</button>
+    <div class="switch" onclick="toggleMode()">Switch to Register</div>
+  </div>
+</div>
 
 <footer>
   © 2026 Max Soccer ⚽ — Built for real football fans
 </footer>
 
 <script>
-/* LIVE USERS COUNTER */
-let users = 28939;
-const userEl = document.getElementById("userCount");
+/* ===== SUPABASE INIT ===== */
+const supabase = supabaseJs.createClient(
+  "SUPABASE_URL",
+  "SUPABASE_ANON_KEY"
+);
 
-setInterval(() => {
-  const change = Math.floor(Math.random() * 6);
-  users += Math.random() > 0.45 ? change : -1;
-  userEl.textContent = users.toLocaleString();
-}, 2600);
+let role = "vip";
+let mode = "login";
 
-/* LOAD LIVE CONTENT */
-const grid = document.getElementById("hubGrid");
-
-async function loadHub(){
-  try{
-    const res = await fetch("https://www.scorebat.com/video-api/v3/");
-    const data = await res.json();
-
-    const lfc = data.response.find(m =>
-      m.title.toLowerCase().includes("liverpool")
-    ) || data.response[0];
-
-    const img = lfc.thumbnail;
-
-    grid.innerHTML = `
-      <a href="news.html" class="card">
-        <img src="${img}" alt="Football News">
-        <h3>Football News</h3>
-        <p>Breaking Liverpool news, transfers, injuries and verified updates.</p>
-      </a>
-
-      <a href="results.html" class="card">
-        <img src="${img}" alt="Live Results">
-        <h3>Live Results</h3>
-        <p>Real-time scores, goals, match timelines and full-time stats.</p>
-      </a>
-
-      <a href="prediction.html" class="card vip">
-        <img src="${img}" alt="Predictions">
-        <h3>AI Predictions</h3>
-        <p>Data-driven predictions, probabilities and VIP insights.</p>
-      </a>
-
-      <a href="login-register.html" class="card ambassador">
-        <img src="${img}" alt="Ambassador Program">
-        <h3>Become an Ambassador</h3>
-        <p>
-          Earn <strong>10% commission</strong> on every VIP subscription.
-          Track referrals and grow with Max Soccer.
-        </p>
-      </a>
-    `;
-  }catch(e){
-    console.error(e);
-  }
+/* ===== MODAL ===== */
+function openModal(selectedRole){
+  role = selectedRole;
+  mode = "login";
+  updateModal();
+  document.getElementById("authModal").style.display="flex";
+}
+function closeModal(){
+  document.getElementById("authModal").style.display="none";
+}
+function toggleMode(){
+  mode = mode === "login" ? "register" : "login";
+  updateModal();
+}
+function updateModal(){
+  document.getElementById("modalTitle").textContent = 
+    `${mode === "login" ? "Login" : "Register"} as ${role.toUpperCase()}`;
 }
 
-loadHub();
-</script>
+/* ===== LIVE USERS COUNTER ===== */
+let users = 28939;
+const userEl = document.getElementById("userCount");
+setInterval(()=>{
+  const change = Math.floor(Math.random() * 5);
+  users += Math.random()>0.5? change:-1;
+  userEl.textContent = users.toLocaleString();
+},3000);
 
+/* ===== AUTH HANDLER ===== */
+async function handleAuth(){
+  const email = email.value;
+  const password = password.value;
+
+  let response;
+  if(mode==="register"){
+    response = await supabase.auth.signUp({email,password});
+    if(!response.error){
+      await supabase.from("profiles").insert({
+        id: response.data.user.id,
+        role: role,
+        is_vip: false
+      });
+    }
+  }else{
+    response = await supabase.auth.signInWithPassword({email,password});
+  }
+
+  if(response.error){
+    alert(response.error.message);
+    return;
+  }
+
+  const { data } = await supabase.from("profiles").select("*")
+    .eq("id", response.data.user.id)
+    .single();
+
+  // ROLE REDIRECTION
+  if(data.role==="ambassador"){
+    window.location.href="ambassador.html";
+  }else{
+    // VIP: Check subscription
+    if(data.is_vip){
+      window.location.href="VIP.html";
+    }else{
+      // Open payment
+      FlutterwaveCheckout({
+        public_key:"FLWPUBK_TEST-XXXX",
+        tx_ref:"MAXSOCCER_"+Date.now(),
+        amount:10,
+        currency:"USD",
+        payment_options:"card",
+        customer:{email:email},
+        callback:async function(){
+          await supabase.from("profiles").update({is_vip:true}).eq("id", data.id);
+          window.location.href="VIP.html";
+        },
+        customizations:{
+          title:"Max Soccer VIP",
+          description:"Monthly VIP Subscription"
+        }
+      });
+    }
+  }
+}
+</script>
 </body>
 </html>
