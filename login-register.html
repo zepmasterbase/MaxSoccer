@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Max Soccer ⚽ | Login & Register</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
@@ -14,53 +14,48 @@
 body{
   min-height:100vh;
   background:radial-gradient(circle at top,#1b1f4b,#070a1f);
+  color:#fff;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
-  color:#fff;
-}
-
-/* ===== CONTAINER ===== */
-.container{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-  gap:3rem;
-  max-width:1000px;
   padding:2rem;
 }
 
-/* ===== ROLE CARD ===== */
+/* ===== ROLE CARDS ===== */
+.container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:2.5rem;
+  max-width:900px;
+  width:100%;
+  margin-bottom:3rem;
+}
+
 .role-card{
   background:rgba(255,255,255,.07);
   backdrop-filter:blur(18px);
-  padding:3rem 2.5rem;
+  padding:2.5rem 2rem;
   border-radius:30px;
   text-align:center;
-  box-shadow:0 25px 60px rgba(0,0,0,.6);
+  box-shadow:0 20px 50px rgba(0,0,0,.5);
   transition:.4s;
-  cursor:pointer;
 }
 .role-card:hover{
   transform:translateY(-12px);
   box-shadow:0 35px 80px rgba(255,0,0,.45);
 }
-.role-card h2{
-  color:#ff0000;
-  margin-bottom:1rem;
-}
-.role-card p{
-  opacity:.85;
-  margin-bottom:2rem;
-}
+.role-card h2{color:#ff0000;margin-bottom:1rem}
+.role-card p{opacity:.85;margin-bottom:2rem}
 .role-card button{
-  padding:1.1rem 2.8rem;
+  padding:1rem 2.5rem;
   border:none;
   border-radius:40px;
   background:linear-gradient(135deg,#ff0000,#ff4d4d);
   color:#fff;
   font-size:1.05rem;
   cursor:pointer;
-  box-shadow:0 0 35px rgba(255,0,0,.8);
+  box-shadow:0 0 35px rgba(255,0,0,.7);
   transition:.3s;
 }
 .role-card button:hover{transform:scale(1.08)}
@@ -78,7 +73,7 @@ body{
 .modal-content{
   background:rgba(255,255,255,.08);
   backdrop-filter:blur(20px);
-  padding:3rem;
+  padding:3rem 2.5rem;
   border-radius:30px;
   width:100%;
   max-width:420px;
@@ -86,10 +81,7 @@ body{
   text-align:center;
   position:relative;
 }
-.modal-content h3{
-  color:#ff0000;
-  margin-bottom:1.5rem;
-}
+.modal-content h3{color:#ff0000;margin-bottom:1.5rem}
 .modal-content input{
   width:100%;
   padding:1rem;
@@ -126,45 +118,40 @@ body{
 </head>
 <body>
 
-<div class="container">
+<h1 style="text-align:center;margin-bottom:2rem;color:#ff0000;text-shadow:0 0 20px #ff0000;">Max Soccer ⚽</h1>
 
-  <!-- VIP CARD -->
-  <div class="role-card" onclick="openModal('vip')">
+<div class="container">
+  <div class="role-card">
     <h2>VIP Access 🔐</h2>
-    <p>Unlock AI predictions, insider news, and advanced stats.</p>
-    <button>Login / Register</button>
+    <p>Unlock AI predictions, insider news and advanced stats.</p>
+    <button onclick="openModal('vip')">Login / Register</button>
   </div>
 
-  <!-- AMBASSADOR CARD -->
-  <div class="role-card" onclick="openModal('ambassador')">
+  <div class="role-card">
     <h2>Ambassador 🤝</h2>
     <p>Earn 10% commission by sharing your promo code.</p>
-    <button>Become Ambassador</button>
+    <button onclick="openModal('ambassador')">Become Ambassador</button>
   </div>
-
 </div>
 
 <!-- MODAL -->
 <div class="modal" id="authModal">
   <div class="modal-content">
     <div class="close" onclick="closeModal()">×</div>
-    <h3 id="modalTitle"></h3>
+    <h3 id="modalTitle">Login</h3>
 
     <input type="email" id="email" placeholder="Email">
     <input type="password" id="password" placeholder="Password">
+    <input type="text" id="promo" placeholder="Promo Code (optional)" style="display:none">
 
-    <button id="authBtn" onclick="handleAuth()">Continue</button>
+    <button onclick="handleAuth()">Continue</button>
     <div class="switch" onclick="toggleMode()">Switch to Register</div>
   </div>
 </div>
 
 <script>
-/* ===== SUPABASE INIT ===== */
-const supabase = supabaseJs.createClient(
-  "SUPABASE_URL",
-  "SUPABASE_ANON_KEY"
-);
-
+/* ===== SUPABASE ===== */
+const supabase = supabaseJs.createClient("SUPABASE_URL","SUPABASE_ANON_KEY");
 let role = "vip";
 let mode = "login";
 
@@ -174,81 +161,74 @@ function openModal(selectedRole){
   mode = "login";
   updateModal();
   document.getElementById("authModal").style.display="flex";
+  document.getElementById("promo").style.display = role==='vip' ? 'block' : 'none';
 }
-function closeModal(){
-  document.getElementById("authModal").style.display="none";
-}
-function toggleMode(){
-  mode = mode === "login" ? "register" : "login";
-  updateModal();
-}
-function updateModal(){
-  document.getElementById("modalTitle").textContent =
-    `${mode === "login" ? "Login" : "Register"} as ${role.toUpperCase()}`;
-}
+function closeModal(){document.getElementById("authModal").style.display="none"}
+function toggleMode(){mode = mode==='login' ? 'register':'login'; updateModal()}
+function updateModal(){document.getElementById("modalTitle").textContent = `${mode==='login'?'Login':'Register'} as ${role.toUpperCase()}`}
 
-/* ===== AUTH FUNCTION ===== */
+/* ===== HANDLE AUTH ===== */
 async function handleAuth(){
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  let response;
+  const promo = document.getElementById("promo").value;
 
-  if(mode === "register"){
-    response = await supabase.auth.signUp({ email, password });
+  let response;
+  if(mode==='register'){
+    response = await supabase.auth.signUp({email,password});
     if(!response.error){
       await supabase.from("profiles").insert({
         id: response.data.user.id,
         role: role,
         is_vip: false,
+        promo_code: promo || null,
         wallet: 0
       });
     }
-  }else{
-    response = await supabase.auth.signInWithPassword({ email, password });
+  } else {
+    response = await supabase.auth.signInWithPassword({email,password});
   }
 
-  if(response.error){
-    alert(response.error.message);
-    return;
-  }
+  if(response.error){alert(response.error.message); return;}
 
-  const { data } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", response.data.user.id)
-    .single();
+  const { data } = await supabase.from("profiles").select("*").eq("id",response.data.user.id).single();
 
-  /* ROLE BASED REDIRECT */
-  if(data.role === "ambassador"){
+  if(role==='ambassador'){
     window.location.href = "ambassador.html";
-  } else if(data.role === "vip"){
-    if(!data.is_vip){
-      // Trigger Flutterwave payment
-      payVIP(data.id);
-    } else {
-      window.location.href = "VIP.html";
-    }
+  } else {
+    /* VIP PAYWALL */
+    payVIP(data.id,promo);
   }
 }
 
-/* ===== FLUTTERWAVE PAYMENT ===== */
-function payVIP(userId){
+/* ===== VIP PAYMENT FLOW ===== */
+function payVIP(userId,promo){
   FlutterwaveCheckout({
     public_key: "FLWPUBK_TEST-XXXXXXX",
-    tx_ref: "MAXSOCCER_"+Date.now(),
+    tx_ref: "MAXSOCCER_" + Date.now(),
     amount: 10,
     currency: "USD",
     payment_options: "card",
-    customer: { email: document.getElementById("email").value },
+    customer: {email: document.getElementById("email").value},
     callback: async function (data) {
-      // Mark VIP true in Supabase after successful payment
-      await supabase.from("profiles").update({ is_vip:true })
-        .eq("id", userId);
+      // MARK VIP ACTIVE IN SUPABASE
+      await supabase.from("profiles").update({is_vip:true}).eq("id",userId);
+
+      // APPLY PROMO CODE BONUS (if entered)
+      if(promo){
+        const refUser = await supabase.from("profiles").select("*").eq("promo_code",promo).single();
+        if(refUser.data){
+          const current = refUser.data.wallet || 0;
+          await supabase.from("profiles").update({wallet: current + 1}).eq("id",refUser.data.id);
+        }
+      }
+
+      // Redirect to VIP dashboard
       window.location.href = "VIP.html";
     },
     customizations: {
       title: "Max Soccer VIP",
-      description: "Monthly VIP Subscription"
+      description: "Monthly VIP Subscription",
     }
   });
 }
