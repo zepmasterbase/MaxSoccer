@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Max Soccer ⚽ | Ambassador Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+body{
+  background:radial-gradient(circle at top,#1b1f4b,#070a1f);
+  color:#fff;
+  min-height:100vh;
+}
+
+/* HERO */
+.hero{
+  padding:4rem 2rem;
+  text-align:center;
+}
+.hero h1{
+  font-size:3rem;
+  color:#ff0000;
+  text-shadow:0 0 25px rgba(255,0,0,.85);
+}
+.hero p{
+  max-width:700px;
+  margin:1rem auto 2rem;
+  font-size:1.2rem;
+  opacity:.9;
+}
+
+/* PROMO CODE CARD */
+.promo-card{
+  background:rgba(255,255,255,.05);
+  padding:2rem;
+  max-width:400px;
+  margin:2rem auto;
+  border-radius:25px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 0 35px rgba(255,0,0,.5);
+  text-align:center;
+  transition:.5s;
+}
+.promo-card:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 60px rgba(255,0,0,.8);
+}
+.promo-card h2{
+  font-size:1.8rem;
+  margin-bottom:1rem;
+  color:#ff4d4d;
+  text-shadow:0 0 15px rgba(255,0,0,.7);
+}
+.promo-code{
+  font-size:1.5rem;
+  background:rgba(255,255,255,.1);
+  padding:0.8rem 1.5rem;
+  border-radius:15px;
+  display:inline-block;
+  margin-bottom:1rem;
+  cursor:pointer;
+  transition:.3s;
+}
+.promo-code:hover{
+  background:rgba(255,0,0,.2);
+  transform:scale(1.05);
+}
+
+/* GRID CARDS */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:2rem;
+  max-width:1200px;
+  margin:3rem auto;
+}
+.card{
+  background:rgba(255,255,255,.05);
+  padding:2rem;
+  border-radius:25px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 0 25px rgba(255,0,0,.5);
+  transition:.4s;
+  text-align:center;
+  position:relative;
+}
+.card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 0 55px rgba(255,0,0,.8);
+}
+.card h3{
+  font-size:1.4rem;
+  margin-bottom:0.8rem;
+  color:#ff4d4d;
+}
+.card p{
+  opacity:.85;
+  line-height:1.5;
+  font-size:1rem;
+}
+
+/* WALLET */
+.wallet{
+  background:rgba(255,255,255,.07);
+  max-width:400px;
+  margin:2rem auto;
+  padding:2rem;
+  border-radius:25px;
+  text-align:center;
+  box-shadow:0 0 35px rgba(255,0,0,.5);
+  backdrop-filter:blur(20px);
+}
+.wallet h2{
+  font-size:1.6rem;
+  margin-bottom:1rem;
+  color:#ff4d4d;
+}
+.wallet p{
+  font-size:1.4rem;
+  font-weight:700;
+}
+
+/* BUTTONS */
+button{
+  padding:1rem 2rem;
+  margin-top:1rem;
+  border:none;
+  border-radius:50px;
+  background:linear-gradient(135deg,#ff0000,#ff4d4d);
+  color:#fff;
+  cursor:pointer;
+  font-size:1.1rem;
+  transition:.3s;
+}
+button:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 45px rgba(255,0,0,.7);
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:3rem 2rem;
+  background:#050712;
+  opacity:.7;
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Max Soccer ⚽ Ambassador</h1>
+  <p>Welcome! Share your unique promo code and earn 10% commission on every VIP subscription. Track your referrals and wallet in real-time!</p>
+</div>
+
+<!-- PROMO CODE CARD -->
+<div class="promo-card">
+  <h2>Your Promo Code</h2>
+  <div class="promo-code" id="promoCode">MAX-XXXX</div>
+  <button onclick="copyPromo()">Copy Code</button>
+</div>
+
+<!-- WALLET -->
+<div class="wallet">
+  <h2>Your Wallet</h2>
+  <p>$<span id="walletBalance">0.00</span></p>
+  <button onclick="withdraw()">Withdraw</button>
+</div>
+
+<!-- REFERRALS GRID -->
+<section>
+  <h2 style="text-align:center;color:#ff0000;margin-bottom:2rem;">Your Referrals</h2>
+  <div class="grid" id="referralGrid">
+    <!-- Referral cards will load here -->
+  </div>
+</section>
+
+<footer>
+  © 2026 Max Soccer ⚽ — Ambassador Program
+</footer>
+
+<script type="module">
+// ===== SUPABASE SETUP =====
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+const supabaseUrl = 'https://YOUR_SUPABASE_URL.supabase.co'
+const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+// ===== CURRENT USER =====
+let user = null
+
+async function initUser() {
+  const { data: { user: currentUser } } = await supabase.auth.getUser()
+  if (!currentUser) {
+    alert('Please login to access the ambassador dashboard.')
+    window.location.href = 'login-register.html'
+    return
+  }
+  user = currentUser
+  loadPromo()
+  loadWallet()
+  loadReferrals()
+}
+
+// ===== LOAD PROMO CODE =====
+async function loadPromo() {
+  const { data, error } = await supabase
+    .from('users')
+    .select('promo_code')
+    .eq('id', user.id)
+    .single()
+  if (!error && data) {
+    document.getElementById('promoCode').textContent = data.promo_code
+  }
+}
+
+function copyPromo() {
+  const code = document.getElementById('promoCode').textContent
+  navigator.clipboard.writeText(code)
+  alert(`Promo code ${code} copied!`)
+}
+
+// ===== LOAD WALLET =====
+async function loadWallet() {
+  const { data, error } = await supabase
+    .from('users')
+    .select('wallet_balance')
+    .eq('id', user.id)
+    .single()
+  if (!error && data) {
+    document.getElementById('walletBalance').textContent = data.wallet_balance.toFixed(2)
+  }
+}
+
+// ===== LOAD REFERRALS =====
+async function loadReferrals() {
+  const { data: referrals, error } = await supabase
+    .from('referrals')
+    .select('id, subscription_id, commission_amount, created_at')
+    .eq('ambassador_id', user.id)
+    .order('created_at', { ascending: false })
+
+  const grid = document.getElementById('referralGrid')
+  grid.innerHTML = ''
+  if (referrals && referrals.length > 0) {
+    referrals.forEach(r => {
+      grid.innerHTML += `
+        <div class="card">
+          <h3>Referral #${r.id}</h3>
+          <p>Subscription ID: ${r.subscription_id}</p>
+          <p>Commission: $${r.commission_amount.toFixed(2)}</p>
+          <p>${new Date(r.created_at).toLocaleString()}</p>
+        </div>
+      `
+    })
+  } else {
+    grid.innerHTML = '<p style="text-align:center;opacity:.7">No referrals yet.</p>'
+  }
+}
+
+// ===== REAL-TIME UPDATES =====
+supabase
+  .channel(`public:referrals:user=${user?.id}`)
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'referrals', filter: `ambassador_id=eq.${user?.id}` }, payload => {
+    loadReferrals()
+    loadWallet()
+  })
+  .subscribe()
+
+// ===== WITHDRAW FUNCTION =====
+function withdraw() {
+  alert('Withdrawal request sent! Admin will process payout.')
+}
+
+initUser()
+</script>
+
+</body>
+</html>
