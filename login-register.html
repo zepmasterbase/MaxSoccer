@@ -1,217 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Max Soccer ⚽ | Login & Register</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
 body{
+  min-height:100vh;
   background:radial-gradient(circle at top,#1b1f4b,#070a1f);
-  color:#fff;
   display:flex;
-  justify-content:center;
   align-items:center;
-  height:100vh;
+  justify-content:center;
+  color:#fff;
 }
 
-/* MODAL */
-.modal{
-  background:rgba(0,0,0,.7);
-  padding:3rem 2rem;
-  border-radius:25px;
-  backdrop-filter:blur(15px);
-  box-shadow:0 0 50px rgba(255,0,0,.7);
-  max-width:450px;
-  width:100%;
+/* ===== CONTAINER ===== */
+.container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:3rem;
+  max-width:1000px;
+  padding:2rem;
+}
+
+/* ===== ROLE CARD ===== */
+.role-card{
+  background:rgba(255,255,255,.07);
+  backdrop-filter:blur(18px);
+  padding:3rem 2.5rem;
+  border-radius:30px;
   text-align:center;
-  position:relative;
-  animation:fadeIn 0.6s ease;
+  box-shadow:0 25px 60px rgba(0,0,0,.6);
+  transition:.4s;
 }
-@keyframes fadeIn{
-  0%{opacity:0;transform:translateY(-30px);}
-  100%{opacity:1;transform:translateY(0);}
+.role-card:hover{
+  transform:translateY(-12px);
+  box-shadow:0 35px 80px rgba(255,0,0,.45);
 }
-
-.modal h1{
+.role-card h2{
   color:#ff0000;
-  text-shadow:0 0 15px rgba(255,0,0,.7);
   margin-bottom:1rem;
 }
-.modal p{
+.role-card p{
   opacity:.85;
   margin-bottom:2rem;
 }
-.modal .tabs{
-  display:flex;
-  justify-content:center;
-  margin-bottom:2rem;
-}
-.modal .tab{
-  padding:.8rem 2rem;
-  cursor:pointer;
-  border-bottom:2px solid transparent;
-  transition:.3s;
-}
-.modal .tab.active{
-  border-bottom:2px solid #ff4d4d;
-  color:#ff4d4d;
-}
-
-/* FORM */
-form{
-  display:none;
-  flex-direction:column;
-  gap:1rem;
-}
-form.active{display:flex;}
-
-input, select{
-  padding:1rem;
-  border-radius:15px;
+.role-card button{
+  padding:1.1rem 2.8rem;
   border:none;
-  outline:none;
-  background:rgba(255,255,255,.05);
-  color:#fff;
-  font-size:1rem;
-  backdrop-filter:blur(5px);
-  transition:.3s;
-}
-input:focus, select:focus{
-  background:rgba(255,0,0,.1);
-  box-shadow:0 0 20px rgba(255,0,0,.5);
-}
-
-button{
-  padding:1rem;
-  border:none;
-  border-radius:50px;
+  border-radius:40px;
   background:linear-gradient(135deg,#ff0000,#ff4d4d);
   color:#fff;
-  font-weight:700;
+  font-size:1.05rem;
   cursor:pointer;
-  font-size:1.1rem;
+  box-shadow:0 0 35px rgba(255,0,0,.8);
   transition:.3s;
 }
-button:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 50px rgba(255,0,0,.7);
-}
+.role-card button:hover{transform:scale(1.08)}
 
-/* FOOTER */
-footer{
+/* ===== MODAL ===== */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+}
+.modal-content{
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(20px);
+  padding:3rem;
+  border-radius:30px;
+  width:100%;
+  max-width:420px;
+  box-shadow:0 0 70px rgba(255,0,0,.6);
   text-align:center;
-  padding-top:2rem;
-  opacity:.6;
-  font-size:.85rem;
 }
-
+.modal-content h3{
+  color:#ff0000;
+  margin-bottom:1.5rem;
+}
+.modal-content input{
+  width:100%;
+  padding:1rem;
+  border-radius:12px;
+  border:none;
+  outline:none;
+  margin-bottom:1rem;
+}
+.modal-content button{
+  width:100%;
+  padding:1rem;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#ff0000,#ff4d4d);
+  color:#fff;
+  font-size:1.05rem;
+  cursor:pointer;
+  box-shadow:0 0 30px rgba(255,0,0,.7);
+}
+.switch{
+  margin-top:1rem;
+  font-size:.85rem;
+  opacity:.8;
+  cursor:pointer;
+}
+.close{
+  position:absolute;
+  top:20px;
+  right:30px;
+  font-size:1.8rem;
+  cursor:pointer;
+}
 </style>
 </head>
 <body>
 
-<div class="modal">
-  <h1>Max Soccer ⚽</h1>
-  <p>Login or Register to access VIP content or Ambassador dashboard</p>
+<div class="container">
 
-  <div class="tabs">
-    <div class="tab active" data-tab="login">Login</div>
-    <div class="tab" data-tab="register">Register</div>
+  <!-- VIP CARD -->
+  <div class="role-card">
+    <h2>VIP Access 🔐</h2>
+    <p>Unlock AI predictions, insider news and advanced stats.</p>
+    <button onclick="openModal('vip')">Login / Register</button>
   </div>
 
-  <!-- LOGIN FORM -->
-  <form id="loginForm" class="active">
-    <input type="email" id="loginEmail" placeholder="Email" required>
-    <input type="password" id="loginPassword" placeholder="Password" required>
-    <select id="loginRole">
-      <option value="user">VIP Subscriber</option>
-      <option value="ambassador">Ambassador</option>
-    </select>
-    <button type="submit">Login</button>
-  </form>
+  <!-- AMBASSADOR CARD -->
+  <div class="role-card">
+    <h2>Ambassador 🤝</h2>
+    <p>Earn 10% commission by sharing your promo code.</p>
+    <button onclick="openModal('ambassador')">Become Ambassador</button>
+  </div>
 
-  <!-- REGISTER FORM -->
-  <form id="registerForm">
-    <input type="text" id="registerUsername" placeholder="Username" required>
-    <input type="email" id="registerEmail" placeholder="Email" required>
-    <input type="password" id="registerPassword" placeholder="Password" required>
-    <select id="registerRole">
-      <option value="user">VIP Subscriber</option>
-      <option value="ambassador">Ambassador</option>
-    </select>
-    <button type="submit">Register</button>
-  </form>
-
-  <footer>© 2026 Max Soccer ⚽</footer>
 </div>
 
-<script type="module">
-// ===== SUPABASE INIT =====
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+<!-- MODAL -->
+<div class="modal" id="authModal">
+  <div class="modal-content">
+    <div class="close" onclick="closeModal()">×</div>
+    <h3 id="modalTitle"></h3>
 
-const supabaseUrl = 'https://YOUR_SUPABASE_URL.supabase.co'
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'
-const supabase = createClient(supabaseUrl, supabaseKey)
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
 
-// ===== TABS =====
-const tabs = document.querySelectorAll('.tab')
-const loginForm = document.getElementById('loginForm')
-const registerForm = document.getElementById('registerForm')
+    <button onclick="handleAuth()">Continue</button>
+    <div class="switch" onclick="toggleMode()">Switch to Register</div>
+  </div>
+</div>
 
-tabs.forEach(tab=>{
-  tab.addEventListener('click', ()=>{
-    tabs.forEach(t=>t.classList.remove('active'))
-    tab.classList.add('active')
-    if(tab.dataset.tab==='login'){
-      loginForm.classList.add('active')
-      registerForm.classList.remove('active')
-    }else{
-      registerForm.classList.add('active')
-      loginForm.classList.remove('active')
+<script>
+/* ===== SUPABASE INIT ===== */
+const supabase = supabaseJs.createClient(
+  "SUPABASE_URL",
+  "SUPABASE_ANON_KEY"
+);
+
+let role = "vip";
+let mode = "login";
+
+/* ===== MODAL ===== */
+function openModal(selectedRole){
+  role = selectedRole;
+  mode = "login";
+  updateModal();
+  document.getElementById("authModal").style.display="flex";
+}
+function closeModal(){
+  document.getElementById("authModal").style.display="none";
+}
+function toggleMode(){
+  mode = mode === "login" ? "register" : "login";
+  updateModal();
+}
+function updateModal(){
+  document.getElementById("modalTitle").textContent =
+    `${mode === "login" ? "Login" : "Register"} as ${role.toUpperCase()}`;
+}
+
+/* ===== AUTH ===== */
+async function handleAuth(){
+  const email = email.value;
+  const password = password.value;
+
+  let response;
+  if(mode === "register"){
+    response = await supabase.auth.signUp({ email, password });
+    if(!response.error){
+      await supabase.from("profiles").insert({
+        id: response.data.user.id,
+        role: role,
+        is_vip: false
+      });
     }
-  })
-})
+  }else{
+    response = await supabase.auth.signInWithPassword({ email, password });
+  }
 
-// ===== REGISTER =====
-registerForm.addEventListener('submit', async (e)=>{
-  e.preventDefault()
-  const username = document.getElementById('registerUsername').value
-  const email = document.getElementById('registerEmail').value
-  const password = document.getElementById('registerPassword').value
-  const role = document.getElementById('registerRole').value
+  if(response.error){
+    alert(response.error.message);
+    return;
+  }
 
-  // Supabase signup
-  const { data, error } = await supabase.auth.signUp({ email, password })
-  if(error){ alert(error.message); return }
+  const { data } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", response.data.user.id)
+    .single();
 
-  // Insert user profile with role and promo code
-  const promoCode = `MAX-${username.toUpperCase()}-${Math.floor(1000 + Math.random()*9000)}`
-  await supabase.from('users').insert({ id: data.user.id, username, email, role, promo_code: promoCode, wallet_balance:0 })
-
-  alert('Registration successful! Promo code generated: '+promoCode)
-  window.location.href = role==='ambassador' ? 'ambassador.html' : 'vip.html'
-})
-
-// ===== LOGIN =====
-loginForm.addEventListener('submit', async (e)=>{
-  e.preventDefault()
-  const email = document.getElementById('loginEmail').value
-  const password = document.getElementById('loginPassword').value
-  const role = document.getElementById('loginRole').value
-
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-  if(error){ alert(error.message); return }
-
-  // Fetch user role from Supabase
-  const { data: profile } = await supabase.from('users').select('role').eq('id', data.user.id).single()
-  if(!profile){ alert('Profile not found'); return }
-
-  // Redirect based on role
-  if(profile.role==='ambassador') window.location.href = 'ambassador.html'
-  else window.location.href = 'vip.html'
-})
+  /* ROLE ROUTING */
+  if(data.role === "ambassador"){
+    window.location.href = "ambassador.html";
+  }else{
+    if(data.is_vip){
+      window.location.href = "VIP.html";
+    }else{
+      window.location.href = "VIP.html"; // locked state → payment inside VIP.html
+    }
+  }
+}
 </script>
 
 </body>
