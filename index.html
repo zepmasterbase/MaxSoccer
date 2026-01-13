@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Max Soccer ⚽ | Live Football Hub</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
 body{
   background:radial-gradient(circle at top,#1b1f4b,#070a1f);
   color:#fff;
+  scroll-behavior:smooth;
 }
 
 /* HERO */
@@ -30,28 +30,16 @@ body{
   font-size:1.15rem;
   opacity:.9;
 }
-
-/* LIVE USERS */
-.live-users{
-  margin-top:2rem;
-  display:inline-block;
-  padding:0.9rem 2rem;
-  border-radius:40px;
-  background:rgba(255,255,255,.08);
-  backdrop-filter:blur(12px);
-  box-shadow:0 0 25px rgba(255,0,0,.4);
-  font-size:1rem;
+.hero .buttons{
+  margin-top:3rem;
+  display:flex;
+  justify-content:center;
+  gap:1.5rem;
+  flex-wrap:wrap;
 }
-.live-users span{
-  color:#ff4d4d;
-  font-weight:700;
-  text-shadow:0 0 10px rgba(255,0,0,.8);
-}
-
 .hero a{
   display:inline-block;
-  margin-top:3rem;
-  padding:1.3rem 3.5rem;
+  padding:1.3rem 3rem;
   background:linear-gradient(135deg,#ff0000,#ff4d4d);
   color:#fff;
   text-decoration:none;
@@ -63,6 +51,23 @@ body{
 .hero a:hover{
   transform:scale(1.08);
   box-shadow:0 0 75px rgba(255,0,0,.9);
+}
+
+/* LIVE USERS */
+.live-users{
+  display:inline-block;
+  margin-top:2rem;
+  padding:0.9rem 2rem;
+  border-radius:40px;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 25px rgba(255,0,0,.4);
+  font-size:1rem;
+}
+.live-users span{
+  color:#ff4d4d;
+  font-weight:700;
+  text-shadow:0 0 10px rgba(255,0,0,.8);
 }
 
 /* SECTION */
@@ -95,6 +100,7 @@ section{
   backdrop-filter:blur(18px);
   box-shadow:0 15px 40px rgba(0,0,0,.5);
   transition:.4s;
+  text-align:center;
 }
 .card:hover{
   transform:translateY(-14px);
@@ -135,6 +141,47 @@ section{
   box-shadow:0 0 15px rgba(255,0,0,.8);
 }
 
+/* AMBASSADOR CARD */
+.ambassador-card{
+  background:rgba(255,255,255,.05);
+  border-radius:25px;
+  padding:2rem;
+  margin-top:3rem;
+  text-align:center;
+  box-shadow:0 0 35px rgba(255,0,0,.5);
+  backdrop-filter:blur(20px);
+  animation:pulse 2s infinite;
+}
+.ambassador-card h3{
+  font-size:1.5rem;
+  margin-bottom:1rem;
+  color:#ff4d4d;
+}
+.ambassador-card p{
+  font-size:1rem;
+  opacity:.85;
+  margin-bottom:1.5rem;
+}
+.ambassador-card a{
+  display:inline-block;
+  padding:1rem 2.5rem;
+  background:linear-gradient(135deg,#ff0000,#ff4d4d);
+  color:#fff;
+  border-radius:50px;
+  text-decoration:none;
+  font-weight:700;
+  transition:.3s;
+}
+.ambassador-card a:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 50px rgba(255,0,0,.7);
+}
+
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 35px rgba(255,0,0,.5);}
+  50%{box-shadow:0 0 55px rgba(255,0,0,.8);}
+}
+
 /* FOOTER */
 footer{
   padding:3rem;
@@ -151,15 +198,18 @@ footer{
   <h1>Max Soccer ⚽</h1>
   <p>
     Live football scores, Liverpool-focused news, match results and expert predictions —
-    trusted by real fans worldwide.
+    trusted by fans worldwide.
   </p>
 
   <!-- LIVE USERS -->
   <div class="live-users">
-    🔴 <span id="userCount">10,928</span> fans online now
+    🔴 <span id="userCount">28,939</span> fans online now
   </div>
 
-  <a href="login-register.html">Unlock VIP Predictions</a>
+  <div class="buttons">
+    <a href="login-register.html">Unlock VIP Predictions</a>
+    <a href="login-register.html">Become an Ambassador ⚽</a>
+  </div>
 </div>
 
 <!-- LIVE HUB -->
@@ -168,53 +218,64 @@ footer{
   <div class="grid" id="mainGrid"></div>
 </section>
 
+<!-- AMBASSADOR CTA CARD -->
+<div class="ambassador-card">
+  <h3>Join Max Soccer Ambassadors!</h3>
+  <p>Share your promo code & earn 10% on every VIP subscription. Start your ambassador journey today!</p>
+  <a href="login-register.html">Sign Up as Ambassador</a>
+</div>
+
 <footer>
   © 2026 Max Soccer ⚽ — Built for real football fans
 </footer>
 
 <script>
 const grid = document.getElementById("mainGrid");
-
-/* LIVE USERS COUNTER (STIMULATED) */
-let users = 10928;
 const userEl = document.getElementById("userCount");
 
+// ==== SIMULATED LIVE USERS COUNTER ====
+let users = 28939;
 setInterval(() => {
-  const change = Math.floor(Math.random() * 4); // subtle growth
+  const change = Math.floor(Math.random() * 5);
   users += Math.random() > 0.5 ? change : -1;
   userEl.textContent = users.toLocaleString();
 }, 3000);
 
-/* LIVE HOMEPAGE CONTENT */
+// ==== LOAD LIVE HUB CARDS ====
 async function loadHomepage(){
-  const res = await fetch("https://www.scorebat.com/video-api/v3/");
-  const data = await res.json();
+  try{
+    const res = await fetch("https://www.scorebat.com/video-api/v3/");
+    const data = await res.json();
 
-  const liverpoolMatch = data.response.find(
-    m => m.title.toLowerCase().includes("liverpool")
-  ) || data.response[0];
+    const liverpoolMatch = data.response.find(
+      m => m.title.toLowerCase().includes("liverpool")
+    ) || data.response[0];
 
-  const img = liverpoolMatch.thumbnail;
+    const img = liverpoolMatch.thumbnail;
 
-  grid.innerHTML = `
-    <a href="new.html" class="card">
-      <img src="${img}" alt="Football News">
-      <h3>Football News</h3>
-      <p>Breaking Liverpool news, transfers, injuries and verified match updates.</p>
-    </a>
+    grid.innerHTML = `
+      <a href="new.html" class="card">
+        <img src="${img}" alt="Football News">
+        <h3>Football News</h3>
+        <p>Breaking Liverpool news, transfers, injuries and verified match updates.</p>
+      </a>
 
-    <a href="results.html" class="card">
-      <img src="${img}" alt="Live Results">
-      <h3>Live Results</h3>
-      <p>Real-time match scores, goal updates and full-time results.</p>
-    </a>
+      <a href="results.html" class="card">
+        <img src="${img}" alt="Live Results">
+        <h3>Live Results</h3>
+        <p>Real-time match scores, goal updates and full-time results.</p>
+      </a>
 
-    <a href="prediction.html" class="card vip">
-      <img src="${img}" alt="Predictions">
-      <h3>Expert Predictions</h3>
-      <p>Data-driven predictions, form analysis and VIP-only insights.</p>
-    </a>
-  `;
+      <a href="prediction.html" class="card vip">
+        <img src="${img}" alt="Predictions">
+        <h3>Expert Predictions</h3>
+        <p>Data-driven predictions, form analysis and VIP-only insights.</p>
+      </a>
+    `;
+  }catch(err){
+    grid.innerHTML='<p style="text-align:center;">Unable to load live content.</p>';
+    console.error(err);
+  }
 }
 
 loadHomepage();
