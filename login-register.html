@@ -57,6 +57,7 @@ body{background:radial-gradient(circle at top,#1b1f4b,#070a1f);color:#fff;min-he
   font-size:1.2rem;
   box-shadow:0 0 45px rgba(255,0,0,.7);
   transition:.4s;
+  cursor:pointer;
 }
 .hero a:hover{
   transform:scale(1.08);
@@ -236,7 +237,7 @@ footer{
     🔴 <span id="userCount">28,939</span> fans online now
   </div>
 
-  <a href="#" id="openModalBtn">Login / Register</a>
+  <a id="openModalBtn">Login / Register</a>
 </div>
 
 <!-- LIVE HUB -->
@@ -253,14 +254,12 @@ footer{
       <button id="registerTab">Register</button>
     </div>
 
-    <!-- LOGIN FORM -->
     <div id="loginForm">
       <input type="email" id="loginEmail" placeholder="Email">
       <input type="password" id="loginPassword" placeholder="Password">
       <button id="loginBtn">Login</button>
     </div>
 
-    <!-- REGISTER FORM -->
     <div id="registerForm" style="display:none;">
       <input type="email" id="regEmail" placeholder="Email">
       <input type="password" id="regPassword" placeholder="Password">
@@ -272,10 +271,9 @@ footer{
       <button id="registerBtn">Register</button>
     </div>
 
-    <!-- VIP PAYMENT (hidden initially) -->
     <div id="vipPayment" style="display:none;">
       <p>Complete your VIP subscription to unlock the dashboard</p>
-      <button id="payVIP">Pay 10$/Month (Flutterwave)</button>
+      <button id="payVIP">Pay 10$/Month</button>
     </div>
   </div>
 </div>
@@ -286,143 +284,123 @@ footer{
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const supabaseUrl = "https://iotraxlicmdyybtgmkwm.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvdHJheGxpY21keXlidGdta3dtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNTA1OTAsImV4cCI6MjA4MzkyNjU5MH0.f69kiDeO7h0RPwRhSzINFoiVRRFjDB_CYk4nbhl2zBA";
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+document.addEventListener("DOMContentLoaded", async ()=>{
 
-/* OPEN MODAL */
-const authModal = document.getElementById("authModal");
-document.getElementById("openModalBtn").addEventListener("click", ()=>{
-  authModal.style.display="flex";
-});
+  const supabaseUrl = "https://iotraxlicmdyybtgmkwm.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvdHJheGxpY21keXlidGdta3dtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNTA1OTAsImV4cCI6MjA4MzkyNjU5MH0.f69kiDeO7h0RPwRhSzINFoiVRRFjDB_CYk4nbhl2zBA";
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-/* CLOSE MODAL ON OUTSIDE CLICK */
-window.addEventListener("click", e=>{
-  if(e.target===authModal) authModal.style.display="none";
-});
+  const authModal = document.getElementById("authModal");
+  document.getElementById("openModalBtn").addEventListener("click", ()=>{
+    authModal.style.display="flex";
+  });
+  window.addEventListener("click", e=>{
+    if(e.target===authModal) authModal.style.display="none";
+  });
 
-/* TAB SWITCH */
-const loginTab = document.getElementById("loginTab");
-const registerTab = document.getElementById("registerTab");
-const loginForm = document.getElementById("loginForm");
-const registerForm = document.getElementById("registerForm");
-loginTab.addEventListener("click", ()=>{
-  loginForm.style.display="block";
-  registerForm.style.display="none";
-  loginTab.classList.add("active");
-  registerTab.classList.remove("active");
-});
-registerTab.addEventListener("click", ()=>{
-  loginForm.style.display="none";
-  registerForm.style.display="block";
-  loginTab.classList.remove("active");
-  registerTab.classList.add("active");
-});
+  // Tabs
+  const loginTab = document.getElementById("loginTab");
+  const registerTab = document.getElementById("registerTab");
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+  loginTab.addEventListener("click", ()=>{
+    loginForm.style.display="block";
+    registerForm.style.display="none";
+    loginTab.classList.add("active");
+    registerTab.classList.remove("active");
+  });
+  registerTab.addEventListener("click", ()=>{
+    loginForm.style.display="none";
+    registerForm.style.display="block";
+    loginTab.classList.remove("active");
+    registerTab.classList.add("active");
+  });
 
-/* LIVE USERS COUNTER */
-let users = 28939;
-const userEl = document.getElementById("userCount");
-setInterval(() => {
-  const change = Math.floor(Math.random()*5);
-  users += Math.random()>0.5?change:-1;
-  userEl.textContent = users.toLocaleString();
-}, 3000);
+  // Users counter
+  let users = 28939;
+  const userEl = document.getElementById("userCount");
+  setInterval(()=>{
+    const change=Math.floor(Math.random()*5);
+    users += Math.random()>0.5?change:-1;
+    userEl.textContent=users.toLocaleString();
+  },3000);
 
-/* LOAD LIVE HUB */
-const grid = document.getElementById("mainGrid");
-async function loadHub(){
-  try{
-    const res = await fetch("https://www.scorebat.com/video-api/v3/");
-    const data = await res.json();
-    const liverpoolMatch = data.response.find(m => m.title.toLowerCase().includes("liverpool")) || data.response[0];
-    const img = liverpoolMatch.thumbnail;
-
-    grid.innerHTML = `
-      <a href="new.html" class="card">
-        <img src="${img}" alt="Football News">
-        <h3>Football News</h3>
-        <p>Breaking Liverpool news, transfers, injuries and verified match updates.</p>
-      </a>
-      <a href="results.html" class="card">
-        <img src="${img}" alt="Live Results">
-        <h3>Live Results</h3>
-        <p>Real-time match scores, goal updates and full-time results.</p>
-      </a>
-      <a href="prediction.html" class="card vip">
-        <img src="${img}" alt="Predictions">
-        <h3>Expert Predictions</h3>
-        <p>Data-driven predictions, form analysis and VIP-only insights.</p>
-      </a>
-      <a href="ambassador.html" class="card">
-        <img src="${img}" alt="Ambassador Program">
-        <h3>Become an Ambassador</h3>
-        <p>Share your promo code, earn rewards for every VIP subscription referred.</p>
-      </a>
-    `;
-  } catch(err){
-    grid.innerHTML='<p style="text-align:center">Unable to load live hub</p>';
-    console.error(err);
+  // Live Hub
+  const grid = document.getElementById("mainGrid");
+  async function loadHub(){
+    try{
+      const res = await fetch("https://www.scorebat.com/video-api/v3/");
+      const data = await res.json();
+      const liverpoolMatch = data.response.find(m=>m.title.toLowerCase().includes("liverpool")) || data.response[0];
+      const img = liverpoolMatch.thumbnail;
+      grid.innerHTML = `
+      <a href="new.html" class="card"><img src="${img}" alt="Football News"><h3>Football News</h3><p>Breaking Liverpool news, transfers, injuries and verified match updates.</p></a>
+      <a href="results.html" class="card"><img src="${img}" alt="Live Results"><h3>Live Results</h3><p>Real-time match scores, goal updates and full-time results.</p></a>
+      <a href="prediction.html" class="card vip"><img src="${img}" alt="Predictions"><h3>Expert Predictions</h3><p>Data-driven predictions, form analysis and VIP-only insights.</p></a>
+      <a href="ambassador.html" class="card"><img src="${img}" alt="Ambassador"><h3>Become an Ambassador</h3><p>Share your promo code, earn rewards for VIP subscriptions referred.</p></a>
+      `;
+    }catch(err){
+      console.error(err);
+      grid.innerHTML='<p style="text-align:center">Unable to load live hub</p>';
+    }
   }
-}
-loadHub();
+  loadHub();
 
-/* LOGIN */
-document.getElementById("loginBtn").addEventListener("click", async ()=>{
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
-  const { data, error } = await supabase.auth.signInWithPassword({email,password});
-  if(error) return alert(error.message);
+  // LOGIN
+  document.getElementById("loginBtn").addEventListener("click", async ()=>{
+    const email=document.getElementById("loginEmail").value;
+    const password=document.getElementById("loginPassword").value;
+    const {data,error}=await supabase.auth.signInWithPassword({email,password});
+    if(error) return alert(error.message);
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", data.user.id).single();
+    const { data: profile } = await supabase.from("profiles").select("*").eq("id", data.user.id).single();
 
-  if(profile.role==="vip"){
-    if(!profile.is_vip){
+    if(profile.role==="vip"){
+      if(!profile.is_vip){
+        loginForm.style.display="none";
+        registerForm.style.display="none";
+        document.getElementById("vipPayment").style.display="block";
+      } else {
+        window.location.href="VIP.html";
+      }
+    } else {
+      window.location.href="ambassador.html";
+    }
+  });
+
+  // REGISTER
+  document.getElementById("registerBtn").addEventListener("click", async ()=>{
+    const email=document.getElementById("regEmail").value;
+    const password=document.getElementById("regPassword").value;
+    const role=document.getElementById("regRole").value;
+    const promo=document.getElementById("regPromo").value||null;
+
+    const { data: authData, error } = await supabase.auth.signUp({email,password});
+    if(error) return alert(error.message);
+
+    const { data: profileErr } = await supabase.from("profiles").insert([{
+      id: authData.user.id,
+      email,
+      role,
+      is_vip: role==="vip"?false:null,
+      promo_code: promo,
+      wallet: role==="ambassador"?0:null
+    }]);
+
+    if(role==="vip"){
       loginForm.style.display="none";
       registerForm.style.display="none";
       document.getElementById("vipPayment").style.display="block";
     } else {
-      window.location.href="VIP.html";
+      window.location.href="ambassador.html";
     }
-  } else {
-    window.location.href="ambassador.html";
-  }
-});
+  });
 
-/* REGISTER */
-document.getElementById("registerBtn").addEventListener("click", async ()=>{
-  const email = document.getElementById("regEmail").value;
-  const password = document.getElementById("regPassword").value;
-  const role = document.getElementById("regRole").value;
-  const promo = document.getElementById("regPromo").value || null;
-
-  const { data: authData, error } = await supabase.auth.signUp({email,password});
-  if(error) return alert(error.message);
-
-  const { data: profileErr } = await supabase.from("profiles").insert([{
-    id: authData.user.id,
-    email,
-    role,
-    is_vip: role==="vip"?false:null,
-    promo_code: promo,
-    wallet: role==="ambassador"?0:null
-  }]);
-  
-  if(role==="vip"){
-    loginForm.style.display="none";
-    registerForm.style.display="none";
-    document.getElementById("vipPayment").style.display="block";
-  } else {
-    window.location.href="ambassador.html";
-  }
-});
-
-/* VIP PAYMENT */
-document.getElementById("payVIP").addEventListener("click", ()=>{
-  // Placeholder for Flutterwave integration
-  alert("VIP Payment Success! Updating your subscription...");
-  const user = supabase.auth.getUser();
-  user.then(u=>{
-    supabase.from("profiles").update({is_vip:true, vip_expiry:new Date().toISOString()}).eq("id", u.data.user.id);
+  // VIP Payment
+  document.getElementById("payVIP").addEventListener("click", async ()=>{
+    alert("VIP Payment Success! Updating your subscription...");
+    const { data: user } = await supabase.auth.getUser();
+    await supabase.from("profiles").update({is_vip:true, vip_expiry:new Date().toISOString()}).eq("id", user.user.id);
     window.location.href="VIP.html";
   });
 });
