@@ -30,7 +30,7 @@ body{
   border-radius:25px;
   padding:3rem;
   width:100%;
-  max-width:400px;
+  max-width:420px;
   text-align:center;
   backdrop-filter:blur(15px);
   box-shadow:0 0 35px rgba(255,0,0,.4);
@@ -65,7 +65,7 @@ body{
   transition:0.3s;
 }
 .auth-card input:focus, .auth-card select:focus{
-  box-shadow:0 0 10px #ff0000;
+  box-shadow:0 0 12px #ff0000;
 }
 
 /* BUTTONS */
@@ -155,7 +155,8 @@ footer{
 <script>
 const supabaseUrl = "https://iotraxlicmdyybtgmkwm.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvdHJheGxpY21keXlidGdta3dtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNTA1OTAsImV4cCI6MjA4MzkyNjU5MH0.f69kiDeO7h0RPwRhSzINFoiVRRFjDB_CYk4nbhl2zBA";
-const supabase = supabaseJs.createClient(supabaseUrl, supabaseKey);
+
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 // Toggle forms
 const loginTab = document.getElementById("loginTab");
@@ -181,16 +182,24 @@ document.getElementById("loginBtn").addEventListener("click", async ()=>{
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
 
-  const { data, error } = await supabase.auth.signInWithPassword({email, password});
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if(error) return alert(error.message);
 
-  // Get user role
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", data.user.id).single();
+  // Fetch role from profiles table
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", data.user.id)
+    .single();
+
+  if(profileError) return alert(profileError.message);
 
   if(profile.role === "vip"){
     window.location.href = "VIP.html";
-  } else {
+  } else if(profile.role === "ambassador"){
     window.location.href = "ambassador.html";
+  } else {
+    alert("Role not defined. Contact support.");
   }
 });
 
@@ -201,11 +210,12 @@ document.getElementById("registerBtn").addEventListener("click", async ()=>{
   const role = document.getElementById("regRole").value;
   const promo = document.getElementById("regPromo").value || null;
 
-  const { data: authData, error } = await supabase.auth.signUp({email, password});
+  // Sign up user
+  const { data: authData, error } = await supabase.auth.signUp({ email, password });
   if(error) return alert(error.message);
 
-  // Insert into profiles
-  const { data, error: profileError } = await supabase
+  // Insert profile
+  const { data: profileData, error: profileError } = await supabase
     .from("profiles")
     .insert([{
       id: authData.user.id,
@@ -218,14 +228,11 @@ document.getElementById("registerBtn").addEventListener("click", async ()=>{
 
   if(profileError) return alert(profileError.message);
 
-  // VIP Payment Flow (Flutterwave placeholder)
   if(role==="vip"){
-    // Example: call Flutterwave inline payment here
-    // On success, mark is_vip = true in Supabase and insert vip_subscriptions
+    // Placeholder for Flutterwave payment flow
     alert("Redirecting to VIP payment gateway...");
-    // After payment, redirect to VIP dashboard
     window.location.href="VIP.html";
-  } else {
+  } else if(role==="ambassador"){
     window.location.href="ambassador.html";
   }
 });
