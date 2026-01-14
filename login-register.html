@@ -3,169 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Max Soccer ⚽ | Live Football Hub</title>
-
+<title>Max Soccer ⚽ | VIP Login & Register</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
-body{background:radial-gradient(circle at top,#1b1f4b,#070a1f);color:#fff;min-height:100vh;overflow-x:hidden;}
-
-/* HERO */
-.hero{
-  padding:6rem 2rem;
-  text-align:center;
-}
-.hero h1{
-  font-size:3.4rem;
-  color:#ff0000;
-  text-shadow:0 0 25px rgba(255,0,0,.85);
-}
-.hero p{
-  max-width:750px;
-  margin:1.5rem auto 0;
-  font-size:1.15rem;
-  opacity:.9;
-}
-
-/* LIVE USERS */
-.live-users{
-  margin-top:2rem;
-  display:inline-block;
-  padding:0.9rem 2rem;
-  border-radius:40px;
-  background:rgba(255,255,255,.08);
-  backdrop-filter:blur(12px);
-  box-shadow:0 0 25px rgba(255,0,0,.4);
-  font-size:1rem;
-}
-.live-users span{
-  color:#ff4d4d;
-  font-weight:700;
-  text-shadow:0 0 10px rgba(255,0,0,.8);
-}
-
-/* BUTTONS */
-.hero a{
-  display:inline-block;
-  margin-top:3rem;
-  padding:1.3rem 3.5rem;
-  background:linear-gradient(135deg,#ff0000,#ff4d4d);
+body{
+  background:radial-gradient(circle at top,#1b1f4b,#070a1f);
   color:#fff;
-  text-decoration:none;
-  border-radius:50px;
-  font-size:1.2rem;
-  box-shadow:0 0 45px rgba(255,0,0,.7);
-  transition:.4s;
-  cursor:pointer;
-}
-.hero a:hover{
-  transform:scale(1.08);
-  box-shadow:0 0 75px rgba(255,0,0,.9);
-}
-
-/* SECTION */
-section{
-  padding:5rem 3rem;
-  max-width:1400px;
-  margin:auto;
-}
-.section-title{
-  text-align:center;
-  font-size:2.2rem;
-  margin-bottom:3.5rem;
-  color:#ff0000;
-}
-
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-  gap:3rem;
-}
-
-/* CARD */
-.card{
-  background:rgba(255,255,255,.07);
-  border-radius:25px;
-  padding:1.7rem;
-  text-decoration:none;
-  color:#fff;
-  backdrop-filter:blur(18px);
-  box-shadow:0 15px 40px rgba(0,0,0,.5);
-  transition:.4s;
-}
-.card:hover{
-  transform:translateY(-14px);
-  box-shadow:0 28px 65px rgba(255,0,0,.45);
-}
-.card img{
-  width:100%;
-  border-radius:18px;
-  margin-bottom:1.3rem;
-  transform:perspective(900px) rotateX(7deg);
-  transition:.4s;
-}
-.card:hover img{
-  transform:perspective(900px) rotateX(0deg) scale(1.05);
-}
-.card h3{
-  font-size:1.35rem;
-  margin-bottom:.6rem;
-}
-.card p{
-  opacity:.85;
-  line-height:1.6;
-}
-
-/* VIP TAG */
-.vip{
-  position:relative;
-}
-.vip::after{
-  content:"VIP";
-  position:absolute;
-  top:20px;
-  right:20px;
-  background:#ff0000;
-  padding:.4rem .9rem;
-  border-radius:20px;
-  font-size:.75rem;
-  box-shadow:0 0 15px rgba(255,0,0,.8);
-}
-
-/* MODAL WRAPPER */
-.modal-wrapper{
-  display:none;
+  min-height:100vh;
+  display:flex;
   justify-content:center;
   align-items:center;
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background:rgba(0,0,0,0.75);
-  z-index:1000;
-  padding:2rem;
 }
-
 /* MODAL CARD */
-.modal-card{
+.auth-card{
   background:rgba(255,255,255,.05);
+  backdrop-filter:blur(15px);
   border-radius:25px;
   padding:3rem;
-  max-width:450px;
   width:100%;
+  max-width:400px;
   text-align:center;
-  backdrop-filter:blur(15px);
-  box-shadow:0 0 45px rgba(255,0,0,.5);
-  position:relative;
+  box-shadow:0 0 35px rgba(255,0,0,.5);
   animation:pulseGlow 2.5s infinite alternate;
+  position:relative;
 }
 @keyframes pulseGlow{
   0%{ box-shadow:0 0 35px rgba(255,0,0,.4); }
   50%{ box-shadow:0 0 55px rgba(255,0,0,.7); }
   100%{ box-shadow:0 0 40px rgba(255,0,0,.5); }
 }
-.modal-card input, .modal-card select{
+/* HEADINGS */
+.auth-card h2{ font-size:2rem; color:#ff0000; margin-bottom:1.5rem; text-shadow:0 0 12px #ff0000; }
+/* INPUTS */
+.auth-card input{
   width:100%;
   padding:0.9rem 1rem;
   margin:0.8rem 0;
@@ -175,11 +46,13 @@ section{
   background:rgba(255,255,255,.1);
   color:#fff;
   font-size:1rem;
+  transition:0.3s;
 }
-.modal-card input:focus, .modal-card select:focus{
+.auth-card input:focus{
   box-shadow:0 0 10px #ff0000;
 }
-.modal-card button{
+/* BUTTONS */
+.auth-card button{
   margin-top:1.5rem;
   padding:1rem 2.5rem;
   font-size:1.1rem;
@@ -192,11 +65,10 @@ section{
   box-shadow:0 0 35px rgba(255,0,0,.6);
   transition:0.3s;
 }
-.modal-card button:hover{
+.auth-card button:hover{
   transform:scale(1.05);
   box-shadow:0 0 65px rgba(255,0,0,.9);
 }
-
 /* TABS */
 .tabs{
   display:flex;
@@ -216,65 +88,39 @@ section{
   color:#ff0000;
   border-bottom:2px solid #ff0000;
 }
-
 /* FOOTER */
 footer{
-  padding:3rem;
   text-align:center;
-  background:#050712;
-  opacity:.7;
+  padding:2rem;
+  opacity:0.7;
+  font-size:0.9rem;
 }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://checkout.flutterwave.com/v3.js"></script>
 </head>
 <body>
 
-<!-- HERO -->
-<div class="hero">
-  <h1>Max Soccer ⚽</h1>
-  <p>Live football scores, Liverpool-focused news, match results and expert predictions — trusted by fans worldwide.</p>
-
-  <div class="live-users">
-    🔴 <span id="userCount">28,939</span> fans online now
+<div class="auth-card">
+  <div class="tabs">
+    <button id="loginTab" class="active">Login</button>
+    <button id="registerTab">Register</button>
   </div>
 
-  <a id="openModalBtn">Login / Register</a>
-</div>
+  <!-- LOGIN FORM -->
+  <div id="loginForm">
+    <input type="email" id="loginEmail" placeholder="Email" />
+    <input type="password" id="loginPassword" placeholder="Password" />
+    <button id="loginBtn">Login</button>
+  </div>
 
-<!-- LIVE HUB -->
-<section>
-  <h2 class="section-title">Live Football Hub</h2>
-  <div class="grid" id="mainGrid"></div>
-</section>
-
-<!-- MODAL LOGIN / REGISTER / VIP PAYMENT -->
-<div class="modal-wrapper" id="authModal">
-  <div class="modal-card">
-    <div class="tabs">
-      <button id="loginTab" class="active">Login</button>
-      <button id="registerTab">Register</button>
-    </div>
-
-    <div id="loginForm">
-      <input type="email" id="loginEmail" placeholder="Email">
-      <input type="password" id="loginPassword" placeholder="Password">
-      <button id="loginBtn">Login</button>
-    </div>
-
-    <div id="registerForm" style="display:none;">
-      <input type="email" id="regEmail" placeholder="Email">
-      <input type="password" id="regPassword" placeholder="Password">
-      <select id="regRole">
-        <option value="vip">VIP Subscriber</option>
-        <option value="ambassador">Ambassador</option>
-      </select>
-      <input type="text" id="regPromo" placeholder="Promo Code (Optional)">
-      <button id="registerBtn">Register</button>
-    </div>
-
-    <div id="vipPayment" style="display:none;">
-      <p>Complete your VIP subscription to unlock the dashboard</p>
-      <button id="payVIP">Pay 10$/Month</button>
-    </div>
+  <!-- REGISTER FORM -->
+  <div id="registerForm" style="display:none;">
+    <input type="email" id="regEmail" placeholder="Email" />
+    <input type="password" id="regPassword" placeholder="Password" />
+    <input type="text" id="regPromo" placeholder="Promo Code (Optional)" />
+    <button id="registerBtn">Register & Pay VIP</button>
   </div>
 </div>
 
@@ -282,128 +128,108 @@ footer{
   © 2026 Max Soccer ⚽ — Live Football Intelligence
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-document.addEventListener("DOMContentLoaded", async ()=>{
+// Supabase config
+const supabaseUrl = "https://iotraxlicmdyybtgmkwm.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvdHJheGxpY21keXlidGdta3dtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNTA1OTAsImV4cCI6MjA4MzkyNjU5MH0.f69kiDeO7h0RPwRhSzINFoiVRRFjDB_CYk4nbhl2zBA";
+const supabase = supabaseJs.createClient(supabaseUrl, supabaseKey);
 
-  const supabaseUrl = "https://iotraxlicmdyybtgmkwm.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvdHJheGxpY21keXlidGdta3dtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNTA1OTAsImV4cCI6MjA4MzkyNjU5MH0.f69kiDeO7h0RPwRhSzINFoiVRRFjDB_CYk4nbhl2zBA";
-  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Toggle tabs
+const loginTab = document.getElementById("loginTab");
+const registerTab = document.getElementById("registerTab");
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
 
-  const authModal = document.getElementById("authModal");
-  document.getElementById("openModalBtn").addEventListener("click", ()=>{
-    authModal.style.display="flex";
-  });
-  window.addEventListener("click", e=>{
-    if(e.target===authModal) authModal.style.display="none";
-  });
-
-  // Tabs
-  const loginTab = document.getElementById("loginTab");
-  const registerTab = document.getElementById("registerTab");
-  const loginForm = document.getElementById("loginForm");
-  const registerForm = document.getElementById("registerForm");
-  loginTab.addEventListener("click", ()=>{
-    loginForm.style.display="block";
-    registerForm.style.display="none";
-    loginTab.classList.add("active");
-    registerTab.classList.remove("active");
-  });
-  registerTab.addEventListener("click", ()=>{
-    loginForm.style.display="none";
-    registerForm.style.display="block";
-    loginTab.classList.remove("active");
-    registerTab.classList.add("active");
-  });
-
-  // Users counter
-  let users = 28939;
-  const userEl = document.getElementById("userCount");
-  setInterval(()=>{
-    const change=Math.floor(Math.random()*5);
-    users += Math.random()>0.5?change:-1;
-    userEl.textContent=users.toLocaleString();
-  },3000);
-
-  // Live Hub
-  const grid = document.getElementById("mainGrid");
-  async function loadHub(){
-    try{
-      const res = await fetch("https://www.scorebat.com/video-api/v3/");
-      const data = await res.json();
-      const liverpoolMatch = data.response.find(m=>m.title.toLowerCase().includes("liverpool")) || data.response[0];
-      const img = liverpoolMatch.thumbnail;
-      grid.innerHTML = `
-      <a href="new.html" class="card"><img src="${img}" alt="Football News"><h3>Football News</h3><p>Breaking Liverpool news, transfers, injuries and verified match updates.</p></a>
-      <a href="results.html" class="card"><img src="${img}" alt="Live Results"><h3>Live Results</h3><p>Real-time match scores, goal updates and full-time results.</p></a>
-      <a href="prediction.html" class="card vip"><img src="${img}" alt="Predictions"><h3>Expert Predictions</h3><p>Data-driven predictions, form analysis and VIP-only insights.</p></a>
-      <a href="ambassador.html" class="card"><img src="${img}" alt="Ambassador"><h3>Become an Ambassador</h3><p>Share your promo code, earn rewards for VIP subscriptions referred.</p></a>
-      `;
-    }catch(err){
-      console.error(err);
-      grid.innerHTML='<p style="text-align:center">Unable to load live hub</p>';
-    }
-  }
-  loadHub();
-
-  // LOGIN
-  document.getElementById("loginBtn").addEventListener("click", async ()=>{
-    const email=document.getElementById("loginEmail").value;
-    const password=document.getElementById("loginPassword").value;
-    const {data,error}=await supabase.auth.signInWithPassword({email,password});
-    if(error) return alert(error.message);
-
-    const { data: profile } = await supabase.from("profiles").select("*").eq("id", data.user.id).single();
-
-    if(profile.role==="vip"){
-      if(!profile.is_vip){
-        loginForm.style.display="none";
-        registerForm.style.display="none";
-        document.getElementById("vipPayment").style.display="block";
-      } else {
-        window.location.href="VIP.html";
-      }
-    } else {
-      window.location.href="ambassador.html";
-    }
-  });
-
-  // REGISTER
-  document.getElementById("registerBtn").addEventListener("click", async ()=>{
-    const email=document.getElementById("regEmail").value;
-    const password=document.getElementById("regPassword").value;
-    const role=document.getElementById("regRole").value;
-    const promo=document.getElementById("regPromo").value||null;
-
-    const { data: authData, error } = await supabase.auth.signUp({email,password});
-    if(error) return alert(error.message);
-
-    const { data: profileErr } = await supabase.from("profiles").insert([{
-      id: authData.user.id,
-      email,
-      role,
-      is_vip: role==="vip"?false:null,
-      promo_code: promo,
-      wallet: role==="ambassador"?0:null
-    }]);
-
-    if(role==="vip"){
-      loginForm.style.display="none";
-      registerForm.style.display="none";
-      document.getElementById("vipPayment").style.display="block";
-    } else {
-      window.location.href="ambassador.html";
-    }
-  });
-
-  // VIP Payment
-  document.getElementById("payVIP").addEventListener("click", async ()=>{
-    alert("VIP Payment Success! Updating your subscription...");
-    const { data: user } = await supabase.auth.getUser();
-    await supabase.from("profiles").update({is_vip:true, vip_expiry:new Date().toISOString()}).eq("id", user.user.id);
-    window.location.href="VIP.html";
-  });
+loginTab.addEventListener("click", ()=>{
+  loginForm.style.display="block";
+  registerForm.style.display="none";
+  loginTab.classList.add("active");
+  registerTab.classList.remove("active");
 });
+registerTab.addEventListener("click", ()=>{
+  loginForm.style.display="none";
+  registerForm.style.display="block";
+  loginTab.classList.remove("active");
+  registerTab.classList.add("active");
+});
+
+// LOGIN
+document.getElementById("loginBtn").addEventListener("click", async ()=>{
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
+
+  const { data, error } = await supabase.auth.signInWithPassword({email, password});
+  if(error) return alert(error.message);
+
+  // Check VIP status
+  const { data: profile } = await supabase.from("vip_profiles").select("*").eq("id", data.user.id).single();
+  if(!profile.is_vip){
+    alert("Please pay VIP subscription to access VIP dashboard");
+    // trigger payment again if unpaid
+    payVIP(profile.id, email);
+    return;
+  }
+
+  window.location.href = "VIP.html";
+});
+
+// REGISTER + PAYMENT
+document.getElementById("registerBtn").addEventListener("click", async ()=>{
+  const email = document.getElementById("regEmail").value;
+  const password = document.getElementById("regPassword").value;
+  const promo = document.getElementById("regPromo").value || null;
+
+  // Supabase auth signup
+  const { data: authData, error } = await supabase.auth.signUp({email, password});
+  if(error) return alert(error.message);
+
+  // Insert VIP profile
+  const { data: profile, error: profileError } = await supabase.from("vip_profiles").insert([{
+    id: authData.user.id,
+    email,
+    is_vip: false,
+    vip_expiry: null,
+    promo_code: promo
+  }]);
+
+  if(profileError) return alert(profileError.message);
+
+  // Trigger VIP payment
+  payVIP(authData.user.id, email);
+});
+
+// Flutterwave VIP payment
+function payVIP(userId, email){
+  FlutterwaveCheckout({
+    public_key: "YOUR_FLUTTERWAVE_PUBLIC_KEY",
+    tx_ref: "MAXSOCCER_" + Date.now(),
+    amount: 10, // monthly subscription
+    currency: "USD",
+    payment_options: "card,ussd,qr",
+    customer: { email },
+    callback: async function (data) {
+      if(data.status === "successful"){
+        // Update VIP status
+        await supabase.from("vip_profiles").update({
+          is_vip: true,
+          vip_expiry: new Date(new Date().setMonth(new Date().getMonth()+1))
+        }).eq("id", userId);
+
+        alert("Payment successful! Redirecting to VIP dashboard...");
+        window.location.href="VIP.html";
+      } else {
+        alert("Payment not completed.");
+      }
+    },
+    onclose: function() {},
+    customizations: {
+      title: "Max Soccer VIP",
+      description: "Monthly VIP subscription",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/0/0c/Soccer_ball.svg"
+    }
+  });
+}
 </script>
+
 </body>
 </html>
