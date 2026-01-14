@@ -8,24 +8,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
-body{
+body {
+  margin:0; padding:0; font-family:'Orbitron',sans-serif;
   background:radial-gradient(circle at top,#1b1f4b,#070a1f);
+  height:100vh;
+  overflow:hidden;
   color:#fff;
-  min-height:100vh;
 }
 
-/* MODAL WRAPPER */
-.modal-wrapper{
-  display:flex;
+/* BACKDROP */
+.backdrop {
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,.7);
+  display:none;
   justify-content:center;
   align-items:center;
-  min-height:100vh;
-  padding:2rem;
+  z-index:1000;
 }
 
-/* CARD */
-.auth-card{
+/* MODAL CARD */
+.modal-card {
   background:rgba(255,255,255,.05);
   border-radius:25px;
   padding:3rem;
@@ -34,17 +38,31 @@ body{
   text-align:center;
   backdrop-filter:blur(15px);
   box-shadow:0 0 35px rgba(255,0,0,.4);
-  animation:pulseGlow 2.5s infinite alternate;
+  animation:pulseGlow 2s infinite alternate;
   position:relative;
+  transform:translateY(-50px);
+  opacity:0;
+  transition:0.5s;
 }
-@keyframes pulseGlow{
+
+/* ANIMATION */
+.pulseGlow{
   0%{ box-shadow:0 0 35px rgba(255,0,0,.4); }
   50%{ box-shadow:0 0 55px rgba(255,0,0,.7); }
   100%{ box-shadow:0 0 40px rgba(255,0,0,.5); }
 }
 
-/* HEADINGS */
-.auth-card h2{
+/* MODAL SHOW */
+.backdrop.show {
+  display:flex;
+}
+.backdrop.show .modal-card {
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* HEADER */
+.modal-card h2{
   font-size:2rem;
   color:#ff0000;
   margin-bottom:1.5rem;
@@ -52,7 +70,7 @@ body{
 }
 
 /* INPUTS */
-.auth-card input, .auth-card select{
+.modal-card input, .modal-card select{
   width:100%;
   padding:0.9rem 1rem;
   margin:0.8rem 0;
@@ -64,12 +82,12 @@ body{
   font-size:1rem;
   transition:0.3s;
 }
-.auth-card input:focus, .auth-card select:focus{
+.modal-card input:focus, .modal-card select:focus{
   box-shadow:0 0 12px #ff0000;
 }
 
 /* BUTTONS */
-.auth-card button{
+.modal-card button{
   margin-top:1.5rem;
   padding:1rem 2.5rem;
   font-size:1.1rem;
@@ -82,7 +100,7 @@ body{
   box-shadow:0 0 35px rgba(255,0,0,.6);
   transition:0.3s;
 }
-.auth-card button:hover{
+.modal-card button:hover{
   transform:scale(1.05);
   box-shadow:0 0 65px rgba(255,0,0,.9);
 }
@@ -107,8 +125,30 @@ body{
   border-bottom:2px solid #ff0000;
 }
 
+/* OPEN MODAL BUTTON */
+.open-btn {
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  padding:1.5rem 3rem;
+  font-size:1.3rem;
+  background:linear-gradient(135deg,#ff0000,#ff4d4d);
+  color:#fff;
+  border:none;
+  border-radius:50px;
+  cursor:pointer;
+  box-shadow:0 0 45px rgba(255,0,0,.7);
+}
+.open-btn:hover{
+  transform:translate(-50%,-50%) scale(1.05);
+  box-shadow:0 0 75px rgba(255,0,0,.9);
+}
+
 /* FOOTER */
 footer{
+  position:absolute;
+  bottom:0;
+  width:100%;
   text-align:center;
   padding:2rem;
   opacity:0.7;
@@ -120,8 +160,12 @@ footer{
 </head>
 <body>
 
-<div class="modal-wrapper">
-  <div class="auth-card">
+<!-- OPEN MODAL BUTTON -->
+<button class="open-btn" id="openModal">Login / Register</button>
+
+<!-- MODAL -->
+<div class="backdrop" id="authBackdrop">
+  <div class="modal-card">
     <div class="tabs">
       <button id="loginTab" class="active">Login</button>
       <button id="registerTab">Register</button>
@@ -158,7 +202,14 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-// Toggle forms
+// OPEN MODAL
+const openModalBtn = document.getElementById("openModal");
+const authBackdrop = document.getElementById("authBackdrop");
+openModalBtn.addEventListener("click", ()=>{
+  authBackdrop.classList.add("show");
+});
+
+// TABS
 const loginTab = document.getElementById("loginTab");
 const registerTab = document.getElementById("registerTab");
 const loginForm = document.getElementById("loginForm");
@@ -170,6 +221,7 @@ loginTab.addEventListener("click", ()=>{
   loginTab.classList.add("active");
   registerTab.classList.remove("active");
 });
+
 registerTab.addEventListener("click", ()=>{
   loginForm.style.display="none";
   registerForm.style.display="block";
@@ -185,7 +237,6 @@ document.getElementById("loginBtn").addEventListener("click", async ()=>{
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if(error) return alert(error.message);
 
-  // Fetch role from profiles table
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("role")
@@ -194,13 +245,9 @@ document.getElementById("loginBtn").addEventListener("click", async ()=>{
 
   if(profileError) return alert(profileError.message);
 
-  if(profile.role === "vip"){
-    window.location.href = "VIP.html";
-  } else if(profile.role === "ambassador"){
-    window.location.href = "ambassador.html";
-  } else {
-    alert("Role not defined. Contact support.");
-  }
+  if(profile.role === "vip") window.location.href="VIP.html";
+  else if(profile.role === "ambassador") window.location.href="ambassador.html";
+  else alert("Role not found");
 });
 
 // REGISTER
@@ -210,11 +257,9 @@ document.getElementById("registerBtn").addEventListener("click", async ()=>{
   const role = document.getElementById("regRole").value;
   const promo = document.getElementById("regPromo").value || null;
 
-  // Sign up user
   const { data: authData, error } = await supabase.auth.signUp({ email, password });
   if(error) return alert(error.message);
 
-  // Insert profile
   const { data: profileData, error: profileError } = await supabase
     .from("profiles")
     .insert([{
@@ -229,10 +274,9 @@ document.getElementById("registerBtn").addEventListener("click", async ()=>{
   if(profileError) return alert(profileError.message);
 
   if(role==="vip"){
-    // Placeholder for Flutterwave payment flow
-    alert("Redirecting to VIP payment gateway...");
+    alert("Redirecting to VIP payment...");
     window.location.href="VIP.html";
-  } else if(role==="ambassador"){
+  } else {
     window.location.href="ambassador.html";
   }
 });
