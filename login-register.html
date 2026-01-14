@@ -151,8 +151,9 @@ footer{
 // ===== SUPABASE INIT =====
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-const supabaseUrl = 'https://YOUR_SUPABASE_URL.supabase.co'
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'
+// Your live Supabase config
+const supabaseUrl = 'https://iotraxlicmdyybtgmkwm.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvdHJheGxpY21keXlidGdta3dtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNTA1OTAsImV4cCI6MjA4MzkyNjU5MH0.f69kiDeO7h0RPwRhSzINFoiVRRFjDB_CYk4nbhl2zBA'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 // ===== TABS =====
@@ -182,11 +183,10 @@ registerForm.addEventListener('submit', async (e)=>{
   const password = document.getElementById('registerPassword').value
   const role = document.getElementById('registerRole').value
 
-  // Supabase signup
   const { data, error } = await supabase.auth.signUp({ email, password })
   if(error){ alert(error.message); return }
 
-  // Insert user profile with role and promo code
+  // Insert user profile with role & promo code
   const promoCode = `MAX-${username.toUpperCase()}-${Math.floor(1000 + Math.random()*9000)}`
   await supabase.from('users').insert({ id: data.user.id, username, email, role, promo_code: promoCode, wallet_balance:0 })
 
@@ -199,18 +199,15 @@ loginForm.addEventListener('submit', async (e)=>{
   e.preventDefault()
   const email = document.getElementById('loginEmail').value
   const password = document.getElementById('loginPassword').value
-  const role = document.getElementById('loginRole').value
 
   const { data, error } = await supabase.auth.signInWithPassword({ email, password })
   if(error){ alert(error.message); return }
 
-  // Fetch user role from Supabase
+  // Fetch role
   const { data: profile } = await supabase.from('users').select('role').eq('id', data.user.id).single()
   if(!profile){ alert('Profile not found'); return }
 
-  // Redirect based on role
-  if(profile.role==='ambassador') window.location.href = 'ambassador.html'
-  else window.location.href = 'vip.html'
+  window.location.href = profile.role==='ambassador' ? 'ambassador.html' : 'vip.html'
 })
 </script>
 
