@@ -8,48 +8,45 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
 body{
   background:radial-gradient(circle at top,#1b1f4b,#070a1f);
   color:#fff;
-  min-height:100vh;
 }
 
-/* HERO */
-.hero{
-  padding:4rem 2rem;
-  text-align:center;
-}
-.hero h1{
-  font-size:3rem;
-  color:#ff0000;
-  text-shadow:0 0 20px #ff0000;
-  margin-bottom:0.5rem;
-}
-.hero p{
-  max-width:700px;
+/* LAYOUT */
+.container{
+  max-width:1400px;
   margin:auto;
-  font-size:1.2rem;
-  opacity:.9;
+  padding:4rem 2rem;
 }
 
-/* WALLET BALANCE */
-.wallet{
-  margin-top:1rem;
-  font-size:1.3rem;
-  color:#ff4d4d;
-  font-weight:700;
-  text-shadow:0 0 10px #ff4d4d;
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:3rem;
+}
+.header h1{
+  color:#ff0000;
+  text-shadow:0 0 20px rgba(255,0,0,.8);
+}
+.logout{
+  padding:.7rem 1.5rem;
+  border-radius:30px;
+  background:#ff0000;
+  border:none;
+  color:#fff;
+  cursor:pointer;
 }
 
-/* GRID CARDS */
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
   gap:2.5rem;
-  padding:3rem;
-  max-width:1400px;
-  margin:auto;
+  margin-bottom:3.5rem;
 }
 
 /* CARD */
@@ -57,171 +54,209 @@ body{
   background:rgba(255,255,255,.07);
   border-radius:25px;
   padding:2rem;
-  text-align:center;
-  backdrop-filter:blur(15px);
-  box-shadow:0 15px 45px rgba(0,0,0,.5);
+  backdrop-filter:blur(20px);
+  box-shadow:0 20px 50px rgba(0,0,0,.5);
   transition:.4s;
   position:relative;
-  animation:pulseGlow 2.5s infinite alternate;
 }
-@keyframes pulseGlow{
-  0%{ box-shadow:0 0 35px rgba(255,0,0,.4); }
-  50%{ box-shadow:0 0 55px rgba(255,0,0,.7); }
-  100%{ box-shadow:0 0 40px rgba(255,0,0,.5); }
-}
-.card img{
-  width:100%;
-  border-radius:18px;
-  margin-bottom:1rem;
-  transform:perspective(900px) rotateX(7deg);
-  transition:.4s;
-}
-.card:hover img{
-  transform:perspective(900px) rotateX(0deg) scale(1.05);
-}
-.card h3{
-  font-size:1.5rem;
-  margin-bottom:0.5rem;
-}
-.card p{
-  opacity:.85;
-  line-height:1.6;
+.card:hover{
+  transform:translateY(-12px);
+  box-shadow:0 30px 70px rgba(255,0,0,.45);
 }
 
-/* GLOW ANIMATION WHEN REFERRAL ADDED */
-.glow{
-  animation:flashGlow 1.5s ease-in-out 2;
+/* PROMO */
+.promo-code{
+  font-size:1.6rem;
+  color:#ff4d4d;
+  text-shadow:0 0 20px rgba(255,0,0,.8);
+  margin:1rem 0;
 }
-@keyframes flashGlow{
-  0%,100%{ box-shadow:0 15px 45px rgba(0,0,0,.5); }
-  50%{ box-shadow:0 20px 60px rgba(255,0,0,.9); }
+.copy-btn{
+  margin-top:1rem;
+  padding:.6rem 1.5rem;
+  border:none;
+  border-radius:25px;
+  background:#ff0000;
+  color:#fff;
+  cursor:pointer;
 }
 
-/* LEADERBOARD TABLE */
+/* STATS */
+.stat{
+  font-size:2.2rem;
+  color:#ff0000;
+}
+.label{
+  opacity:.8;
+}
+
+/* TABLE */
 table{
   width:100%;
   border-collapse:collapse;
-  margin-top:2rem;
-  background:rgba(255,255,255,.05);
-  backdrop-filter:blur(15px);
-  border-radius:15px;
-  overflow:hidden;
 }
-th, td{
+th,td{
   padding:1rem;
+  border-bottom:1px solid rgba(255,255,255,.1);
   text-align:left;
+  font-size:.9rem;
 }
-th{
-  background:rgba(255,0,0,.5);
-  color:#fff;
-}
-tr:nth-child(even){background:rgba(255,255,255,.03);}
-</style>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+/* SHARE */
+.share a{
+  display:inline-block;
+  margin:.4rem;
+  padding:.6rem 1.2rem;
+  border-radius:25px;
+  background:#ff0000;
+  color:#fff;
+  text-decoration:none;
+  font-size:.85rem;
+}
+</style>
 </head>
+
 <body>
 
-<div class="hero">
-  <h1>Ambassador Dashboard ⚽</h1>
-  <p>Track your referrals, earnings, and climb the Max Soccer leaderboard!</p>
-  <div class="wallet">Wallet Balance: $<span id="walletBalance">0.00</span></div>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Ambassador Dashboard ⚽</h1>
+    <button class="logout" id="logoutBtn">Logout</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="grid">
+    <div class="card">
+      <div class="label">Wallet Balance</div>
+      <div class="stat">$<span id="wallet">0.00</span></div>
+    </div>
+
+    <div class="card">
+      <div class="label">Total Referrals</div>
+      <div class="stat" id="referralsCount">0</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Promo Code</div>
+      <div class="promo-code" id="promoCode">---</div>
+      <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+      <div class="share" id="shareLinks"></div>
+    </div>
+  </div>
+
+  <!-- REFERRALS -->
+  <div class="card">
+    <h3 style="margin-bottom:1rem;">Referral Earnings</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Commission</th>
+        </tr>
+      </thead>
+      <tbody id="referralTable"></tbody>
+    </table>
+  </div>
+
 </div>
 
-<!-- REFERRAL & STATS GRID -->
-<section class="grid" id="ambassadorGrid">
-  <!-- Cards populated dynamically -->
-</section>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-<!-- LEADERBOARD -->
-<section style="max-width:1200px;margin:auto;padding:2rem 1rem;">
-  <h2 style="text-align:center;color:#ff0000;margin-bottom:1.5rem;">Top Ambassadors</h2>
-  <table id="leaderboard">
-    <thead>
+const supabase = createClient(
+  "https://iotraxlicmdyybtgmkwm.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvdHJheGxpY21keXlidGdta3dtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNTA1OTAsImV4cCI6MjA4MzkyNjU5MH0.f69kiDeO7h0RPwRhSzINFoiVRRFjDB_CYk4nbhl2zBA"
+);
+
+let userId = null;
+let promoCode = "";
+
+// AUTH CHECK
+const session = await supabase.auth.getSession();
+if(!session.data.session){
+  window.location.href="login-register.html";
+}else{
+  userId = session.data.session.user.id;
+  loadDashboard();
+}
+
+// LOAD DASHBOARD
+async function loadDashboard(){
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("promo_code,wallet_balance,total_referrals,role")
+    .eq("id",userId)
+    .single();
+
+  if(profile.role !== "ambassador"){
+    window.location.href="VIP.html";
+    return;
+  }
+
+  promoCode = profile.promo_code;
+  document.getElementById("promoCode").textContent = promoCode;
+  document.getElementById("wallet").textContent = profile.wallet_balance.toFixed(2);
+  document.getElementById("referralsCount").textContent = profile.total_referrals;
+
+  generateShareLinks();
+  loadReferrals();
+  listenRealtime();
+}
+
+// REFERRALS
+async function loadReferrals(){
+  const { data } = await supabase
+    .from("wallet_transactions")
+    .select("amount,created_at")
+    .eq("ambassador_id",userId)
+    .eq("type","commission")
+    .order("created_at",{ascending:false});
+
+  const tbody = document.getElementById("referralTable");
+  tbody.innerHTML = "";
+  data.forEach(r=>{
+    tbody.innerHTML += `
       <tr>
-        <th>Rank</th>
-        <th>Email</th>
-        <th>Wallet ($)</th>
-        <th>Referrals</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- dynamically populated -->
-    </tbody>
-  </table>
-</section>
-
-<script>
-const supabaseUrl = "https://iotraxlicmdyybtgmkwm.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvdHJheGxpY21keXlidGdta3dtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNTA1OTAsImV4cCI6MjA4MzkyNjU5MH0.f69kiDeO7h0RPwRhSzINFoiVRRFjDB_CYk4nbhl2zBA";
-const supabase = supabaseJs.createClient(supabaseUrl, supabaseKey);
-
-let walletEl = document.getElementById("walletBalance");
-let ambassadorGrid = document.getElementById("ambassadorGrid");
-let leaderboardBody = document.querySelector("#leaderboard tbody");
-
-// Load current ambassador wallet and referrals
-async function loadAmbassadorDashboard(){
-  const { data: user } = await supabase.auth.getUser();
-  const userId = user.user.id;
-
-  // Fetch ambassador profile
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", userId).single();
-
-  // Update wallet
-  walletEl.textContent = profile.wallet.toFixed(2);
-
-  // Load referral stats dynamically
-  const { data: referrals } = await supabase.from("referrals").select("*").eq("ambassador_id", userId).order("created_at",{ascending:false});
-
-  ambassadorGrid.innerHTML = "";
-  referrals.forEach(ref=>{
-    const card = document.createElement("div");
-    card.classList.add("card","glow");
-    card.innerHTML = `
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Soccer_ball.svg" alt="Referral">
-      <h3>${ref.referred_email}</h3>
-      <p>Joined: ${new Date(ref.created_at).toLocaleDateString()}</p>
-      <p>Earned: $${ref.amount.toFixed(2)}</p>
-    `;
-    ambassadorGrid.appendChild(card);
-    setTimeout(()=>card.classList.remove("glow"),1500);
-  });
-
-  // Load leaderboard
-  const { data: leaderboard } = await supabase.from("profiles")
-    .select("email,wallet")
-    .eq("role","ambassador")
-    .order("wallet",{ascending:false})
-    .limit(10);
-
-  leaderboardBody.innerHTML = "";
-  leaderboard.forEach((row,i)=>{
-    leaderboardBody.innerHTML += `
-      <tr>
-        <td>${i+1}</td>
-        <td>${row.email}</td>
-        <td>${row.wallet.toFixed(2)}</td>
-        <td><!-- optional: count referrals per ambassador --></td>
-      </tr>
-    `;
+        <td>${new Date(r.created_at).toLocaleDateString()}</td>
+        <td>$${r.amount.toFixed(2)}</td>
+      </tr>`;
   });
 }
 
-// Real-time wallet update
-supabase.channel('public:profiles')
-  .on('postgres_changes',{event:'UPDATE', schema:'public', table:'profiles'}, payload=>{
-    const updated = payload.new;
-    const user = supabase.auth.getUser();
-    user.then(u=>{
-      if(u.user.id === updated.id){
-        walletEl.textContent = updated.wallet.toFixed(2);
-      }
-    });
-  }).subscribe();
+// REALTIME
+function listenRealtime(){
+  supabase
+    .channel("wallet-updates")
+    .on("postgres_changes",
+      {event:"INSERT",schema:"public",table:"wallet_transactions",filter:`ambassador_id=eq.${userId}`},
+      ()=>loadDashboard()
+    )
+    .subscribe();
+}
 
-// Initialize dashboard
-loadAmbassadorDashboard();
+// SHARE
+function generateShareLinks(){
+  const link = `https://yourdomain.com/login-register.html?ref=${promoCode}`;
+  document.getElementById("shareLinks").innerHTML = `
+    <a href="https://wa.me/?text=Join%20Max%20Soccer%20VIP%20using%20my%20code%20${promoCode}%20${link}" target="_blank">WhatsApp</a>
+    <a href="https://t.me/share/url?url=${link}&text=Use%20my%20promo%20code%20${promoCode}" target="_blank">Telegram</a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=${link}" target="_blank">Facebook</a>
+  `;
+}
+
+// COPY
+window.copyCode = ()=>{
+  navigator.clipboard.writeText(promoCode);
+  alert("Promo code copied!");
+};
+
+// LOGOUT
+logoutBtn.onclick = async()=>{
+  await supabase.auth.signOut();
+  window.location.href="login-register.html";
+};
 </script>
 
 </body>
