@@ -5,26 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Max Soccer ⚽ | VIP Login & Register</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
 body{
   background:radial-gradient(circle at top,#1b1f4b,#070a1f);
   color:#fff;
   min-height:100vh;
+}
+
+/* MODAL WRAPPER */
+.modal-wrapper{
   display:flex;
   justify-content:center;
   align-items:center;
+  min-height:100vh;
+  padding:2rem;
 }
-/* MODAL CARD */
+
+/* CARD */
 .auth-card{
   background:rgba(255,255,255,.05);
-  backdrop-filter:blur(15px);
   border-radius:25px;
   padding:3rem;
   width:100%;
-  max-width:400px;
+  max-width:420px;
   text-align:center;
-  box-shadow:0 0 35px rgba(255,0,0,.5);
+  backdrop-filter:blur(15px);
+  box-shadow:0 0 35px rgba(255,0,0,.4);
   animation:pulseGlow 2.5s infinite alternate;
   position:relative;
 }
@@ -33,8 +41,15 @@ body{
   50%{ box-shadow:0 0 55px rgba(255,0,0,.7); }
   100%{ box-shadow:0 0 40px rgba(255,0,0,.5); }
 }
+
 /* HEADINGS */
-.auth-card h2{ font-size:2rem; color:#ff0000; margin-bottom:1.5rem; text-shadow:0 0 12px #ff0000; }
+.auth-card h2{
+  font-size:2rem;
+  color:#ff0000;
+  margin-bottom:1.5rem;
+  text-shadow:0 0 12px #ff0000;
+}
+
 /* INPUTS */
 .auth-card input{
   width:100%;
@@ -51,6 +66,7 @@ body{
 .auth-card input:focus{
   box-shadow:0 0 10px #ff0000;
 }
+
 /* BUTTONS */
 .auth-card button{
   margin-top:1.5rem;
@@ -69,6 +85,7 @@ body{
   transform:scale(1.05);
   box-shadow:0 0 65px rgba(255,0,0,.9);
 }
+
 /* TABS */
 .tabs{
   display:flex;
@@ -88,6 +105,7 @@ body{
   color:#ff0000;
   border-bottom:2px solid #ff0000;
 }
+
 /* FOOTER */
 footer{
   text-align:center;
@@ -96,31 +114,32 @@ footer{
   font-size:0.9rem;
 }
 </style>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://checkout.flutterwave.com/v3.js"></script>
 </head>
 <body>
 
-<div class="auth-card">
-  <div class="tabs">
-    <button id="loginTab" class="active">Login</button>
-    <button id="registerTab">Register</button>
-  </div>
+<div class="modal-wrapper">
+  <div class="auth-card">
+    <h2>Max Soccer VIP</h2>
+    <div class="tabs">
+      <button id="loginTab" class="active">Login</button>
+      <button id="registerTab">Register</button>
+    </div>
 
-  <!-- LOGIN FORM -->
-  <div id="loginForm">
-    <input type="email" id="loginEmail" placeholder="Email" />
-    <input type="password" id="loginPassword" placeholder="Password" />
-    <button id="loginBtn">Login</button>
-  </div>
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Email" />
+      <input type="password" id="loginPassword" placeholder="Password" />
+      <button id="loginBtn">Login</button>
+    </div>
 
-  <!-- REGISTER FORM -->
-  <div id="registerForm" style="display:none;">
-    <input type="email" id="regEmail" placeholder="Email" />
-    <input type="password" id="regPassword" placeholder="Password" />
-    <input type="text" id="regPromo" placeholder="Promo Code (Optional)" />
-    <button id="registerBtn">Register & Pay VIP</button>
+    <!-- REGISTER FORM -->
+    <div id="registerForm" style="display:none;">
+      <input type="email" id="regEmail" placeholder="Email" />
+      <input type="password" id="regPassword" placeholder="Password" />
+      <input type="text" id="regPromo" placeholder="Promo Code (Optional)" />
+      <button id="registerBtn">Register & Pay VIP</button>
+    </div>
   </div>
 </div>
 
@@ -129,12 +148,12 @@ footer{
 </footer>
 
 <script>
-// Supabase config
 const supabaseUrl = "https://iotraxlicmdyybtgmkwm.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvdHJheGxpY21keXlidGdta3dtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNTA1OTAsImV4cCI6MjA4MzkyNjU5MH0.f69kiDeO7h0RPwRhSzINFoiVRRFjDB_CYk4nbhl2zBA";
+
 const supabase = supabaseJs.createClient(supabaseUrl, supabaseKey);
 
-// Toggle tabs
+// Tabs toggle
 const loginTab = document.getElementById("loginTab");
 const registerTab = document.getElementById("registerTab");
 const loginForm = document.getElementById("loginForm");
@@ -161,75 +180,87 @@ document.getElementById("loginBtn").addEventListener("click", async ()=>{
   const { data, error } = await supabase.auth.signInWithPassword({email, password});
   if(error) return alert(error.message);
 
-  // Check VIP status
-  const { data: profile } = await supabase.from("vip_profiles").select("*").eq("id", data.user.id).single();
-  if(!profile.is_vip){
-    alert("Please pay VIP subscription to access VIP dashboard");
-    // trigger payment again if unpaid
-    payVIP(profile.id, email);
-    return;
-  }
+  // Fetch profile to check VIP
+  const { data: profile, error: profileError } = await supabase
+    .from("vip_profiles")
+    .select("is_vip")
+    .eq("id", data.user.id)
+    .single();
+  if(profileError) return alert(profileError.message);
 
-  window.location.href = "VIP.html";
+  if(!profile.is_vip){
+    alert("Please complete VIP payment first.");
+    triggerVIPPayment(data.user.id);
+  } else {
+    window.location.href="VIP.html";
+  }
 });
 
-// REGISTER + PAYMENT
+// REGISTER
 document.getElementById("registerBtn").addEventListener("click", async ()=>{
   const email = document.getElementById("regEmail").value;
   const password = document.getElementById("regPassword").value;
   const promo = document.getElementById("regPromo").value || null;
 
-  // Supabase auth signup
   const { data: authData, error } = await supabase.auth.signUp({email, password});
   if(error) return alert(error.message);
 
-  // Insert VIP profile
-  const { data: profile, error: profileError } = await supabase.from("vip_profiles").insert([{
+  // Insert into VIP profile
+  const { data, error: profileError } = await supabase.from("vip_profiles").insert([{
     id: authData.user.id,
     email,
     is_vip: false,
     vip_expiry: null,
     promo_code: promo
   }]);
-
   if(profileError) return alert(profileError.message);
 
-  // Trigger VIP payment
-  payVIP(authData.user.id, email);
+  // Trigger VIP Payment
+  triggerVIPPayment(authData.user.id);
 });
 
-// Flutterwave VIP payment
-function payVIP(userId, email){
+// Flutterwave payment
+function triggerVIPPayment(userId){
+  const flwPublicKey = "FLWPUBK_TEST-xxxxxxxxxxxxxxxxxxxxx-X"; // Replace with your Flutterwave public key
+  const amount = 10; // VIP subscription $10
+  const currency = "USD";
+  const tx_ref = "VIP_"+Math.floor(Math.random()*1000000);
+
   FlutterwaveCheckout({
-    public_key: "YOUR_FLUTTERWAVE_PUBLIC_KEY",
-    tx_ref: "MAXSOCCER_" + Date.now(),
-    amount: 10, // monthly subscription
-    currency: "USD",
+    public_key: flwPublicKey,
+    tx_ref: tx_ref,
+    amount: amount,
+    currency: currency,
     payment_options: "card,ussd,qr",
-    customer: { email },
-    callback: async function (data) {
-      if(data.status === "successful"){
-        // Update VIP status
+    customer: {
+      email: document.getElementById("regEmail").value,
+    },
+    callback: async function (payment) {
+      if(payment.status === "successful"){
+        // Update VIP in Supabase
         await supabase.from("vip_profiles").update({
-          is_vip: true,
-          vip_expiry: new Date(new Date().setMonth(new Date().getMonth()+1))
+          is_vip:true,
+          vip_expiry: new Date(new Date().setMonth(new Date().getMonth()+1)) // +1 month
         }).eq("id", userId);
 
-        alert("Payment successful! Redirecting to VIP dashboard...");
+        alert("Payment successful! Redirecting to VIP Dashboard...");
         window.location.href="VIP.html";
       } else {
-        alert("Payment not completed.");
+        alert("Payment failed. Try again.");
       }
     },
     onclose: function() {},
     customizations: {
-      title: "Max Soccer VIP",
-      description: "Monthly VIP subscription",
+      title: "Max Soccer VIP Subscription",
+      description: "Unlock VIP content, predictions & live updates",
       logo: "https://upload.wikimedia.org/wikipedia/commons/0/0c/Soccer_ball.svg"
-    }
+    },
   });
 }
 </script>
+
+<!-- Flutterwave JS -->
+<script type="text/javascript" src="https://checkout.flutterwave.com/v3.js"></script>
 
 </body>
 </html>
