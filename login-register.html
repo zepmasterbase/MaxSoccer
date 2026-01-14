@@ -3,73 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Max Soccer ⚽ | Login & Register</title>
+<title>Max Soccer ⚽ | Live Football Hub</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-body {
-  margin:0; padding:0; font-family:'Orbitron',sans-serif;
-  background:radial-gradient(circle at top,#1b1f4b,#070a1f);
-  height:100vh;
-  overflow:hidden;
-  color:#fff;
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+body{background:radial-gradient(circle at top,#1b1f4b,#070a1f);color:#fff;min-height:100vh;overflow-x:hidden;}
+
+/* HERO */
+.hero{
+  padding:6rem 2rem;
+  text-align:center;
+}
+.hero h1{
+  font-size:3.4rem;
+  color:#ff0000;
+  text-shadow:0 0 25px rgba(255,0,0,.85);
+}
+.hero p{
+  max-width:750px;
+  margin:1.5rem auto 0;
+  font-size:1.15rem;
+  opacity:.9;
 }
 
-/* BACKDROP */
-.backdrop {
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background:rgba(0,0,0,.7);
+/* LIVE USERS */
+.live-users{
+  margin-top:2rem;
+  display:inline-block;
+  padding:0.9rem 2rem;
+  border-radius:40px;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 25px rgba(255,0,0,.4);
+  font-size:1rem;
+}
+.live-users span{
+  color:#ff4d4d;
+  font-weight:700;
+  text-shadow:0 0 10px rgba(255,0,0,.8);
+}
+
+/* BUTTONS */
+.hero a{
+  display:inline-block;
+  margin-top:3rem;
+  padding:1.3rem 3.5rem;
+  background:linear-gradient(135deg,#ff0000,#ff4d4d);
+  color:#fff;
+  text-decoration:none;
+  border-radius:50px;
+  font-size:1.2rem;
+  box-shadow:0 0 45px rgba(255,0,0,.7);
+  transition:.4s;
+}
+.hero a:hover{
+  transform:scale(1.08);
+  box-shadow:0 0 75px rgba(255,0,0,.9);
+}
+
+/* SECTION */
+section{
+  padding:5rem 3rem;
+  max-width:1400px;
+  margin:auto;
+}
+.section-title{
+  text-align:center;
+  font-size:2.2rem;
+  margin-bottom:3.5rem;
+  color:#ff0000;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:3rem;
+}
+
+/* CARD */
+.card{
+  background:rgba(255,255,255,.07);
+  border-radius:25px;
+  padding:1.7rem;
+  text-decoration:none;
+  color:#fff;
+  backdrop-filter:blur(18px);
+  box-shadow:0 15px 40px rgba(0,0,0,.5);
+  transition:.4s;
+}
+.card:hover{
+  transform:translateY(-14px);
+  box-shadow:0 28px 65px rgba(255,0,0,.45);
+}
+.card img{
+  width:100%;
+  border-radius:18px;
+  margin-bottom:1.3rem;
+  transform:perspective(900px) rotateX(7deg);
+  transition:.4s;
+}
+.card:hover img{
+  transform:perspective(900px) rotateX(0deg) scale(1.05);
+}
+.card h3{
+  font-size:1.35rem;
+  margin-bottom:.6rem;
+}
+.card p{
+  opacity:.85;
+  line-height:1.6;
+}
+
+/* VIP TAG */
+.vip{
+  position:relative;
+}
+.vip::after{
+  content:"VIP";
+  position:absolute;
+  top:20px;
+  right:20px;
+  background:#ff0000;
+  padding:.4rem .9rem;
+  border-radius:20px;
+  font-size:.75rem;
+  box-shadow:0 0 15px rgba(255,0,0,.8);
+}
+
+/* MODAL WRAPPER */
+.modal-wrapper{
   display:none;
   justify-content:center;
   align-items:center;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.75);
   z-index:1000;
+  padding:2rem;
 }
 
 /* MODAL CARD */
-.modal-card {
+.modal-card{
   background:rgba(255,255,255,.05);
   border-radius:25px;
   padding:3rem;
+  max-width:450px;
   width:100%;
-  max-width:420px;
   text-align:center;
   backdrop-filter:blur(15px);
-  box-shadow:0 0 35px rgba(255,0,0,.4);
-  animation:pulseGlow 2s infinite alternate;
+  box-shadow:0 0 45px rgba(255,0,0,.5);
   position:relative;
-  transform:translateY(-50px);
-  opacity:0;
-  transition:0.5s;
+  animation:pulseGlow 2.5s infinite alternate;
 }
-
-/* ANIMATION */
-.pulseGlow{
+@keyframes pulseGlow{
   0%{ box-shadow:0 0 35px rgba(255,0,0,.4); }
   50%{ box-shadow:0 0 55px rgba(255,0,0,.7); }
   100%{ box-shadow:0 0 40px rgba(255,0,0,.5); }
 }
-
-/* MODAL SHOW */
-.backdrop.show {
-  display:flex;
-}
-.backdrop.show .modal-card {
-  transform:translateY(0);
-  opacity:1;
-}
-
-/* HEADER */
-.modal-card h2{
-  font-size:2rem;
-  color:#ff0000;
-  margin-bottom:1.5rem;
-  text-shadow:0 0 12px #ff0000;
-}
-
-/* INPUTS */
 .modal-card input, .modal-card select{
   width:100%;
   padding:0.9rem 1rem;
@@ -80,13 +174,10 @@ body {
   background:rgba(255,255,255,.1);
   color:#fff;
   font-size:1rem;
-  transition:0.3s;
 }
 .modal-card input:focus, .modal-card select:focus{
-  box-shadow:0 0 12px #ff0000;
+  box-shadow:0 0 10px #ff0000;
 }
-
-/* BUTTONS */
 .modal-card button{
   margin-top:1.5rem;
   padding:1rem 2.5rem;
@@ -125,46 +216,37 @@ body {
   border-bottom:2px solid #ff0000;
 }
 
-/* OPEN MODAL BUTTON */
-.open-btn {
-  position:absolute;
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  padding:1.5rem 3rem;
-  font-size:1.3rem;
-  background:linear-gradient(135deg,#ff0000,#ff4d4d);
-  color:#fff;
-  border:none;
-  border-radius:50px;
-  cursor:pointer;
-  box-shadow:0 0 45px rgba(255,0,0,.7);
-}
-.open-btn:hover{
-  transform:translate(-50%,-50%) scale(1.05);
-  box-shadow:0 0 75px rgba(255,0,0,.9);
-}
-
 /* FOOTER */
 footer{
-  position:absolute;
-  bottom:0;
-  width:100%;
+  padding:3rem;
   text-align:center;
-  padding:2rem;
-  opacity:0.7;
-  font-size:0.9rem;
+  background:#050712;
+  opacity:.7;
 }
 </style>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-<!-- OPEN MODAL BUTTON -->
-<button class="open-btn" id="openModal">Login / Register</button>
+<!-- HERO -->
+<div class="hero">
+  <h1>Max Soccer ⚽</h1>
+  <p>Live football scores, Liverpool-focused news, match results and expert predictions — trusted by fans worldwide.</p>
 
-<!-- MODAL -->
-<div class="backdrop" id="authBackdrop">
+  <div class="live-users">
+    🔴 <span id="userCount">28,939</span> fans online now
+  </div>
+
+  <a href="#" id="openModalBtn">Login / Register</a>
+</div>
+
+<!-- LIVE HUB -->
+<section>
+  <h2 class="section-title">Live Football Hub</h2>
+  <div class="grid" id="mainGrid"></div>
+</section>
+
+<!-- MODAL LOGIN / REGISTER / VIP PAYMENT -->
+<div class="modal-wrapper" id="authModal">
   <div class="modal-card">
     <div class="tabs">
       <button id="loginTab" class="active">Login</button>
@@ -173,21 +255,27 @@ footer{
 
     <!-- LOGIN FORM -->
     <div id="loginForm">
-      <input type="email" id="loginEmail" placeholder="Email" />
-      <input type="password" id="loginPassword" placeholder="Password" />
+      <input type="email" id="loginEmail" placeholder="Email">
+      <input type="password" id="loginPassword" placeholder="Password">
       <button id="loginBtn">Login</button>
     </div>
 
     <!-- REGISTER FORM -->
     <div id="registerForm" style="display:none;">
-      <input type="email" id="regEmail" placeholder="Email" />
-      <input type="password" id="regPassword" placeholder="Password" />
+      <input type="email" id="regEmail" placeholder="Email">
+      <input type="password" id="regPassword" placeholder="Password">
       <select id="regRole">
         <option value="vip">VIP Subscriber</option>
         <option value="ambassador">Ambassador</option>
       </select>
-      <input type="text" id="regPromo" placeholder="Promo Code (Optional)" />
+      <input type="text" id="regPromo" placeholder="Promo Code (Optional)">
       <button id="registerBtn">Register</button>
+    </div>
+
+    <!-- VIP PAYMENT (hidden initially) -->
+    <div id="vipPayment" style="display:none;">
+      <p>Complete your VIP subscription to unlock the dashboard</p>
+      <button id="payVIP">Pay 10$/Month (Flutterwave)</button>
     </div>
   </div>
 </div>
@@ -196,32 +284,34 @@ footer{
   © 2026 Max Soccer ⚽ — Live Football Intelligence
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const supabaseUrl = "https://iotraxlicmdyybtgmkwm.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvdHJheGxpY21keXlidGdta3dtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNTA1OTAsImV4cCI6MjA4MzkyNjU5MH0.f69kiDeO7h0RPwRhSzINFoiVRRFjDB_CYk4nbhl2zBA";
-
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-// OPEN MODAL
-const openModalBtn = document.getElementById("openModal");
-const authBackdrop = document.getElementById("authBackdrop");
-openModalBtn.addEventListener("click", ()=>{
-  authBackdrop.classList.add("show");
+/* OPEN MODAL */
+const authModal = document.getElementById("authModal");
+document.getElementById("openModalBtn").addEventListener("click", ()=>{
+  authModal.style.display="flex";
 });
 
-// TABS
+/* CLOSE MODAL ON OUTSIDE CLICK */
+window.addEventListener("click", e=>{
+  if(e.target===authModal) authModal.style.display="none";
+});
+
+/* TAB SWITCH */
 const loginTab = document.getElementById("loginTab");
 const registerTab = document.getElementById("registerTab");
 const loginForm = document.getElementById("loginForm");
 const registerForm = document.getElementById("registerForm");
-
 loginTab.addEventListener("click", ()=>{
   loginForm.style.display="block";
   registerForm.style.display="none";
   loginTab.classList.add("active");
   registerTab.classList.remove("active");
 });
-
 registerTab.addEventListener("click", ()=>{
   loginForm.style.display="none";
   registerForm.style.display="block";
@@ -229,58 +319,113 @@ registerTab.addEventListener("click", ()=>{
   registerTab.classList.add("active");
 });
 
-// LOGIN
+/* LIVE USERS COUNTER */
+let users = 28939;
+const userEl = document.getElementById("userCount");
+setInterval(() => {
+  const change = Math.floor(Math.random()*5);
+  users += Math.random()>0.5?change:-1;
+  userEl.textContent = users.toLocaleString();
+}, 3000);
+
+/* LOAD LIVE HUB */
+const grid = document.getElementById("mainGrid");
+async function loadHub(){
+  try{
+    const res = await fetch("https://www.scorebat.com/video-api/v3/");
+    const data = await res.json();
+    const liverpoolMatch = data.response.find(m => m.title.toLowerCase().includes("liverpool")) || data.response[0];
+    const img = liverpoolMatch.thumbnail;
+
+    grid.innerHTML = `
+      <a href="new.html" class="card">
+        <img src="${img}" alt="Football News">
+        <h3>Football News</h3>
+        <p>Breaking Liverpool news, transfers, injuries and verified match updates.</p>
+      </a>
+      <a href="results.html" class="card">
+        <img src="${img}" alt="Live Results">
+        <h3>Live Results</h3>
+        <p>Real-time match scores, goal updates and full-time results.</p>
+      </a>
+      <a href="prediction.html" class="card vip">
+        <img src="${img}" alt="Predictions">
+        <h3>Expert Predictions</h3>
+        <p>Data-driven predictions, form analysis and VIP-only insights.</p>
+      </a>
+      <a href="ambassador.html" class="card">
+        <img src="${img}" alt="Ambassador Program">
+        <h3>Become an Ambassador</h3>
+        <p>Share your promo code, earn rewards for every VIP subscription referred.</p>
+      </a>
+    `;
+  } catch(err){
+    grid.innerHTML='<p style="text-align:center">Unable to load live hub</p>';
+    console.error(err);
+  }
+}
+loadHub();
+
+/* LOGIN */
 document.getElementById("loginBtn").addEventListener("click", async ()=>{
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
-
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({email,password});
   if(error) return alert(error.message);
 
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", data.user.id)
-    .single();
+  const { data: profile } = await supabase.from("profiles").select("*").eq("id", data.user.id).single();
 
-  if(profileError) return alert(profileError.message);
-
-  if(profile.role === "vip") window.location.href="VIP.html";
-  else if(profile.role === "ambassador") window.location.href="ambassador.html";
-  else alert("Role not found");
+  if(profile.role==="vip"){
+    if(!profile.is_vip){
+      loginForm.style.display="none";
+      registerForm.style.display="none";
+      document.getElementById("vipPayment").style.display="block";
+    } else {
+      window.location.href="VIP.html";
+    }
+  } else {
+    window.location.href="ambassador.html";
+  }
 });
 
-// REGISTER
+/* REGISTER */
 document.getElementById("registerBtn").addEventListener("click", async ()=>{
   const email = document.getElementById("regEmail").value;
   const password = document.getElementById("regPassword").value;
   const role = document.getElementById("regRole").value;
   const promo = document.getElementById("regPromo").value || null;
 
-  const { data: authData, error } = await supabase.auth.signUp({ email, password });
+  const { data: authData, error } = await supabase.auth.signUp({email,password});
   if(error) return alert(error.message);
 
-  const { data: profileData, error: profileError } = await supabase
-    .from("profiles")
-    .insert([{
-      id: authData.user.id,
-      email,
-      role,
-      is_vip: role==="vip"?false:null,
-      promo_code: promo,
-      wallet: role==="ambassador"?0:null
-    }]);
-
-  if(profileError) return alert(profileError.message);
-
+  const { data: profileErr } = await supabase.from("profiles").insert([{
+    id: authData.user.id,
+    email,
+    role,
+    is_vip: role==="vip"?false:null,
+    promo_code: promo,
+    wallet: role==="ambassador"?0:null
+  }]);
+  
   if(role==="vip"){
-    alert("Redirecting to VIP payment...");
-    window.location.href="VIP.html";
+    loginForm.style.display="none";
+    registerForm.style.display="none";
+    document.getElementById("vipPayment").style.display="block";
   } else {
     window.location.href="ambassador.html";
   }
 });
-</script>
 
+/* VIP PAYMENT */
+document.getElementById("payVIP").addEventListener("click", ()=>{
+  // Placeholder for Flutterwave integration
+  alert("VIP Payment Success! Updating your subscription...");
+  const user = supabase.auth.getUser();
+  user.then(u=>{
+    supabase.from("profiles").update({is_vip:true, vip_expiry:new Date().toISOString()}).eq("id", u.data.user.id);
+    window.location.href="VIP.html";
+  });
+});
+</script>
 </body>
 </html>
